@@ -34,6 +34,17 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url('/home') }}">{{ __('Home') }}</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.passport.index') }}">{{ __('Passport') }}</a>
+                            </li>
+
+                        @endif
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
