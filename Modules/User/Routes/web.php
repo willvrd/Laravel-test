@@ -11,17 +11,18 @@
 |
 */
 
-Route::prefix('user')->group(function() {
+// Module User
+Route::prefix('user')->middleware('auth')->group(function() {
 
     Route::get('/', 'UserController@index');
 
 
-    // Passport
+    //Passport
     Route::prefix('passport')->name('passport.')->group(function () {
 
         // Index
         Route::get('/', function () {
-            return view('admin.passport.index');
+            return view('user::admin.passport.index');
         })->name('index');
 
     });
