@@ -14,3 +14,11 @@
 Route::prefix('core')->group(function() {
     Route::get('/', 'CoreController@index');
 });
+
+
+// Admin
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
+
+
+
+});

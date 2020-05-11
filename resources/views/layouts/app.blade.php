@@ -40,7 +40,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('admin.passport.index') }}">{{ __('Passport') }}</a>
+                                <a class="nav-link" href="{{ route('user.passport.index') }}">{{ __('Passport') }}</a>
                             </li>
 
                         @endif

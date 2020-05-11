@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Routing\RouteGroup;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,10 +11,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('user')->group(function() {
+
+    Route::get('/', 'UserController@index');
+
+
+    // Passport
+    Route::prefix('passport')->name('passport.')->group(function () {
+
+        // Index
+        Route::get('/', function () {
+            return view('admin.passport.index');
+        })->name('index');
+
+    });
+
+
 });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
