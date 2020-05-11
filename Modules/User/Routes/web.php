@@ -14,7 +14,7 @@
 // Module User
 Route::prefix('user')->middleware('auth')->group(function() {
 
-    Route::get('/', 'UserController@index');
+    Route::get('/', 'Admin\UserController@index')->name('index');
 
 
     //Passport

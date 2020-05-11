@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Http\Controllers;
+namespace Modules\User\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user::index');
+        return view('user::.admin.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user::create');
+        return view('user::admin.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return view('user::show');
+        return view('user::admin.show');
     }
 
     /**
@@ -53,7 +53,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('user::edit');
+        return view('user::admin.edit');
     }
 
     /**
