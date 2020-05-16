@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+$locale = \App::getLocale();
+
+Route::prefix('/user/v1')->name($locale.'.api.user')->group(function(){
+
+    //======  USERS
+    require('ApiRoutes/userRoutes.php');
+
+
 });
