@@ -132,7 +132,12 @@ class UserServiceProvider extends ServiceProvider
             function () {
 
                 $repository = new \Modules\User\Repositories\Eloquent\EloquentUserRepository(new \App\User());
-                return $repository;
+
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+
+                return new \Modules\User\Repositories\Cache\CacheUserDecorator($repository);
 
             }
         );
