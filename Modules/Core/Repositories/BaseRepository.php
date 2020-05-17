@@ -98,4 +98,20 @@ interface BaseRepository
      * @return bool
      */
     public function clearCache();
+
+
+     /**
+     * Get All Items - Index
+     * @return Collection
+     */
+    public function getItemsBy($params);
+
+
+     /**
+     * Get Item - Show
+     * @return Register
+     */
+    public function getItem($criteria, $params);
+
+
 }

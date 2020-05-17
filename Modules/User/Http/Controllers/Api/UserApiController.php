@@ -12,16 +12,21 @@ use Illuminate\Routing\Controller;
 // Entities
 use App\User;
 
+// Repositories
+use Modules\User\Repositories\UserRepository;
+
 // Transformers
 use Modules\User\Transformers\UserTransformer;
 
-class UserApiController extends Controller
+use Modules\Core\Http\Controllers\Api\CoreApiController;
+
+class UserApiController extends CoreApiController
 {
 
     private $user;
 
     public function __construct(
-        User $user
+        UserRepository $user
     ){
         $this->user = $user;
     }
@@ -36,10 +41,13 @@ class UserApiController extends Controller
         try {
 
             //Request to Repository
-            $users = $this->user->all();
+            $users = $this->user->getItemsBy($this->getParamsRequest($request));
 
             //Response
             $response = ['data' => UserTransformer::collection($users)];
+
+            //If request pagination add meta-page
+            $request->page ? $response['meta'] = ['page' => $this->pageTransformer($users)] : false;
 
 
         } catch (\Exception $e) {
@@ -64,7 +72,7 @@ class UserApiController extends Controller
     {
         try {
             //Request to Repository
-            $user = $this->user->find($criteria);
+            $user = $this->user->getItem($criteria,$this->getParamsRequest($request));
 
             //Break if no found item
             if (!$user) throw new \Exception('Item not found', 204);
@@ -75,8 +83,7 @@ class UserApiController extends Controller
 
         } catch (\Exception $e) {
             \Log::error($e);
-            //$status = $this->getStatusError($e->getCode());
-            $status = $e->getCode();
+            $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
         }
         return response()->json($response, $status ?? 200);

@@ -39,6 +39,7 @@ class UserServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->registerBindings();
     }
 
     /**
@@ -122,4 +123,20 @@ class UserServiceProvider extends ServiceProvider
         }
         return $paths;
     }
+
+    private function registerBindings()
+    {
+
+        $this->app->bind(
+            'Modules\User\Repositories\UserRepository',
+            function () {
+
+                $repository = new \Modules\User\Repositories\Eloquent\EloquentUserRepository(new \App\User());
+                return $repository;
+
+            }
+        );
+
+    }
+
 }
