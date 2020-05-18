@@ -77,5 +77,20 @@ class CoreApiController extends Controller
         }
     }
 
+    //Validate if fields are validated according to rules
+    public function validateRequestApi($request)
+    {
+        //Create Validator
+        $validator = \Validator::make($request->all(), $request->rules());
+
+        //if get errors, throw errors
+        if ($validator->fails()) {
+            $errors = json_decode($validator->errors());
+            throw new \Exception(json_encode($errors), 400);
+        } else {//if  is sucessful, return true
+            return true;
+        }
+    }
+
 
 }
