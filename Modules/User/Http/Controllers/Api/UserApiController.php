@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 // Base
-use Illuminate\Routing\Controller;
+use Modules\Core\Http\Controllers\Api\CoreApiController;
 
 // Entities
 use App\User;
@@ -17,8 +17,6 @@ use Modules\User\Repositories\UserRepository;
 
 // Transformers
 use Modules\User\Transformers\UserTransformer;
-
-use Modules\Core\Http\Controllers\Api\CoreApiController;
 
 class UserApiController extends CoreApiController
 {
@@ -51,13 +49,10 @@ class UserApiController extends CoreApiController
 
 
         } catch (\Exception $e) {
-
             \Log::error($e);
             $status = $this->getStatusError($e->getCode());
             $response = ["errors" => $e->getMessage()];
-
         }
-
         return response()->json($response, $status ?? 200);
 
     }

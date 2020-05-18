@@ -20,5 +20,8 @@ Route::prefix('/user/v1')->name($locale.'.api.user')->group(function(){
     //======  USERS
     require('ApiRoutes/userRoutes.php');
 
+    //======  AUTH
+    require('ApiRoutes/authRoutes.php');
+
 
 });
