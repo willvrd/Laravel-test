@@ -12,6 +12,7 @@ Route::prefix('/auth')->name('.auth')->group(function(){
     ->name('.logout')
     ->middleware('auth:api');
 
-
+    Route::post('register', 'Api\Auth\RegisterApiController@register')
+    ->name('.register');
 
 });
