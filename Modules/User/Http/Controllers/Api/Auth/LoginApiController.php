@@ -6,11 +6,9 @@ use Modules\Core\Http\Controllers\Api\CoreApiController;
 
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Validation\ValidationException;
 
 // Requests & Response
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 // Transformers
 use Modules\User\Transformers\UserTransformer;

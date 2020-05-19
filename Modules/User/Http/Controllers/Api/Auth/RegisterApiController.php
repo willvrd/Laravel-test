@@ -10,10 +10,6 @@ use Modules\Core\Http\Controllers\Api\CoreApiController;
 
 // Requests & Response
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
-// Transformers
-use Modules\User\Transformers\UserTransformer;
 
 // Events
 use Illuminate\Auth\Events\Registered;
@@ -90,14 +86,5 @@ class RegisterApiController extends CoreApiController
 
     }
 
-    /**
-     * Get the guard to be used during registration.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
-    protected function guard()
-    {
-        return \Auth::guard();
-    }
 
 }
