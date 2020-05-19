@@ -14,10 +14,10 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required|email|string|max:255',
+            'password' => 'required|string',
             'remember_me' => 'boolean',
-            'device_name' => 'string'
+            'device_name' => 'required|string'
         ];
     }
 

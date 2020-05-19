@@ -112,7 +112,8 @@ class LoginApiController extends CoreApiController
             return $response;
         }
 
-        $token =  $request->user()->createToken($request->input('device_name'))->accessToken;
+        $tokenName = $request->input('device_name')."-".$request->user()->id;
+        $token =  $request->user()->createToken($tokenName)->accessToken;
 
         //Response
         $response = [
