@@ -5,6 +5,8 @@ namespace Modules\User\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 
+use Modules\User\Console\RolePermissionCommand;
+
 class UserServiceProvider extends ServiceProvider
 {
     /**
@@ -40,6 +42,10 @@ class UserServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->registerBindings();
+
+        $this->commands([
+            RolePermissionCommand::class
+        ]);
     }
 
     /**
