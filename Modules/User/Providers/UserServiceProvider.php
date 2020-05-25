@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factory;
 
 use Modules\User\Console\RolePermissionCommand;
 
+use Illuminate\Support\Facades\Gate;
+
 class UserServiceProvider extends ServiceProvider
 {
     /**
@@ -31,6 +33,10 @@ class UserServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->registerFactories();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'Database/Migrations'));
+
+        Gate::before(function ($user, $ability) {
+            return $user->hasRole('super-admin') ? true : null;
+        });
     }
 
     /**
@@ -46,6 +52,7 @@ class UserServiceProvider extends ServiceProvider
         $this->commands([
             RolePermissionCommand::class
         ]);
+
     }
 
     /**
