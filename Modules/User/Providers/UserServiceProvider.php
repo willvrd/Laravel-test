@@ -143,15 +143,22 @@ class UserServiceProvider extends ServiceProvider
         $this->app->bind(
             'Modules\User\Repositories\UserRepository',
             function () {
-
                 $repository = new \Modules\User\Repositories\Eloquent\EloquentUserRepository(new \App\User());
-
                 if (! config('app.cache')) {
                     return $repository;
                 }
-
                 return new \Modules\User\Repositories\Cache\CacheUserDecorator($repository);
+            }
+        );
 
+        $this->app->bind(
+            'Modules\User\Repositories\RoleRepository',
+            function () {
+                $repository = new \Modules\User\Repositories\Eloquent\EloquentRoleRepository(new \Modules\User\Entities\Role());
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+                return new \Modules\User\Repositories\Cache\CacheRoleDecorator($repository);
             }
         );
 
