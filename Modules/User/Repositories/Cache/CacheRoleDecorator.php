@@ -39,4 +39,11 @@ class CacheRoleDecorator extends BaseCacheDecorator implements RoleRepository
   }
 
 
+  public function assign($data)
+  {
+      $this->cache->tags($this->entityName)->flush();
+      return $this->repository->assign($data);
+  }
+
+
 }

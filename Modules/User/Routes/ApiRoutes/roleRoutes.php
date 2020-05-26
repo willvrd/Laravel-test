@@ -12,4 +12,9 @@ Route::prefix('/roles')->name('.roles')->middleware('auth:api')->group(function(
     ->name('.show')
     ->middleware('can:user.roles.index');
 
+    Route::post('/assign', 'Api\RoleApiController@assign')
+    ->name('.assign')
+    ->middleware('can:user.roles.assign');
+
+
 });

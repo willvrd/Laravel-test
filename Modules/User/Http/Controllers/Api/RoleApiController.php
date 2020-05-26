@@ -5,6 +5,7 @@ namespace Modules\User\Http\Controllers\Api;
 // Requests & Response
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\User\Http\Requests\AssignRoleRequest;
 
 // Base
 use Modules\Core\Http\Controllers\Api\CoreApiController;
@@ -18,7 +19,7 @@ use Modules\User\Transformers\RoleTransformer;
 class RoleApiController extends CoreApiController
 {
 
-    private $user;
+    private $role;
 
     public function __construct(
         RoleRepository $role
@@ -81,5 +82,33 @@ class RoleApiController extends CoreApiController
         return response()->json($response, $status ?? 200);
     }
 
+
+    /** Asign Role User
+     * @param Request $request
+     */
+    public function assign(Request $request){
+
+        \DB::beginTransaction();
+
+        try {
+
+            $data = $request['attributes'] ?? [];
+
+            $this->validateRequestApi(new AssignRoleRequest($data));
+
+            $this->role->assign($data);
+
+            $response = ['data' => 'Role(s) assigned to User'];
+
+            \DB::commit();
+
+        } catch (\Exception $e) {
+            \Log::error($e);
+            \DB::rollback();
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+        return response()->json($response, $status ?? 200);
+    }
 
 }

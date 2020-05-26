@@ -7,5 +7,7 @@ use Modules\Core\Repositories\BaseRepository;
 interface RoleRepository extends BaseRepository
 {
 
+    public function assign($data);
+
 
 }
