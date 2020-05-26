@@ -14,36 +14,18 @@ class CacheRoleDecorator extends BaseCacheDecorator implements RoleRepository
         $this->repository = $role;
     }
 
-      /**
-   * List or resources
-   *
-   * @return collection
-   */
-  public function getItemsBy($params)
-  {
-    return $this->remember(function () use ($params) {
-      return $this->repository->getItemsBy($params);
-    });
-  }
 
-  /**
-   * find a resource by id or slug
-   *
-   * @return object
-   */
-  public function getItem($criteria, $params)
-  {
-    return $this->remember(function () use ($criteria, $params) {
-      return $this->repository->getItem($criteria, $params);
-    });
-  }
+    public function assign($data)
+    {
+        $this->cache->tags($this->entityName)->flush();
+        return $this->repository->assign($data);
+    }
 
-
-  public function assign($data)
-  {
-      $this->cache->tags($this->entityName)->flush();
-      return $this->repository->assign($data);
-  }
+    public function unassign($data)
+    {
+        $this->cache->tags($this->entityName)->flush();
+        return $this->repository->unassign($data);
+    }
 
 
 }

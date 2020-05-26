@@ -9,5 +9,6 @@ interface RoleRepository extends BaseRepository
 
     public function assign($data);
 
+    public function unassign($data);
 
 }

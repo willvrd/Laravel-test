@@ -16,5 +16,9 @@ Route::prefix('/roles')->name('.roles')->middleware('auth:api')->group(function(
     ->name('.assign')
     ->middleware('can:user.roles.assign');
 
+    Route::post('/unassign', 'Api\RoleApiController@unassign')
+    ->name('.unassign')
+    ->middleware('can:user.roles.unassign');
+
 
 });

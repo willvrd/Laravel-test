@@ -15,4 +15,11 @@ class EloquentRoleRepository extends EloquentBaseRepository implements RoleRepos
 
     }
 
+    public function unassign($data){
+
+        $user = app("Modules\User\Repositories\UserRepository")->find($data['userId']);
+        $user->removeRole($data['role']);
+
+    }
+
 }

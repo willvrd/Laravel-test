@@ -6,6 +6,8 @@ namespace Modules\User\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\User\Http\Requests\AssignRoleRequest;
+use Modules\User\Http\Requests\UnAssignRoleRequest;
+
 
 // Base
 use Modules\Core\Http\Controllers\Api\CoreApiController;
@@ -83,7 +85,7 @@ class RoleApiController extends CoreApiController
     }
 
 
-    /** Asign Role User
+    /** Assign Role User
      * @param Request $request
      */
     public function assign(Request $request){
@@ -99,6 +101,34 @@ class RoleApiController extends CoreApiController
             $this->role->assign($data);
 
             $response = ['data' => 'Role(s) assigned to User'];
+
+            \DB::commit();
+
+        } catch (\Exception $e) {
+            \Log::error($e);
+            \DB::rollback();
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+        return response()->json($response, $status ?? 200);
+    }
+
+    /** Asign Role User
+     * @param Request $request
+     */
+    public function unassign(Request $request){
+
+        \DB::beginTransaction();
+
+        try {
+
+            $data = $request['attributes'] ?? [];
+
+            $this->validateRequestApi(new UnAssignRoleRequest($data));
+
+            $this->role->unassign($data);
+
+            $response = ['data' => 'Role unassigned to User'];
 
             \DB::commit();
 
