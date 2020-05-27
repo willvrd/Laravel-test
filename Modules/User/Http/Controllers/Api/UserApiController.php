@@ -5,6 +5,8 @@ namespace Modules\User\Http\Controllers\Api;
 // Requests & Response
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\User\Http\Requests\RegisterRequest;
+use Modules\User\Http\Requests\UpdateUserRequest;
 
 // Base
 use Modules\Core\Http\Controllers\Api\CoreApiController;
@@ -84,5 +86,108 @@ class UserApiController extends CoreApiController
         return response()->json($response, $status ?? 200);
     }
 
+    /**
+   * Create.
+   * @param  Request $request
+   * @return Response
+   */
+    public function create(Request $request)
+    {
+
+        \DB::beginTransaction();
+
+        try{
+
+            $data = $request['attributes'] ?? [];
+
+            $this->validateRequestApi(new RegisterRequest($data));
+
+            $user = $this->user->create($data);
+
+            $response = ["data" => new UserTransformer($user)];
+
+            \DB::commit();
+
+        } catch (\Exception $e) {
+            \Log::error($e);
+            \DB::rollback();
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        return response()->json($response, $status ?? 200);
+
+    }
+
+    /**
+   * Update the specified resource in storage.
+   * @param  Request $request
+   * @return Response
+   */
+    public function update($criteria, Request $request)
+    {
+        \DB::beginTransaction();
+
+        try {
+
+            $data = $request['attributes'] ?? [];
+
+            $this->validateRequestApi(new UpdateUserRequest($data));
+
+            $params = $this->getParamsRequest($request);
+
+            // Search entity
+            $entity = $this->user->getItem($criteria,$params);
+
+            //Break if no found item
+            if (!$entity) throw new \Exception('Item not found', 204);
+
+            $user = $this->user->update($entity,$data);
+
+            $response = ['data' => new UserTransformer($user)];
+
+            \DB::commit();
+
+        } catch (\Exception $e) {
+            \Log::error($e);
+            \DB::rollback();
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        return response()->json($response, $status ?? 200);
+
+    }
+
+    /**
+   * Remove the specified resource from storage.
+   * @return Response
+   */
+    public function delete($criteria, Request $request)
+    {
+        try {
+
+            $params = $this->getParamsRequest($request);
+
+            // Search entity
+            $entity = $this->user->getItem($criteria,$params);
+
+            //Break if no found item
+            if (!$entity) throw new \Exception('Item not found', 204);
+
+            $this->user->destroy($entity);
+
+            $response = ['data' => 'Item deleted'];
+
+        } catch (\Exception $e) {
+            \Log::Error($e);
+            \DB::rollback();//Rollback to Data Base
+            $status = $this->getStatusError($e->getCode());
+            $response = ["errors" => $e->getMessage()];
+        }
+
+        return response()->json($response, $status ?? 200);
+
+    }
 
 }

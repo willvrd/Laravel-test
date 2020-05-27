@@ -15,7 +15,18 @@ class EloquentUserRepository extends EloquentBaseRepository implements UserRepos
     public function create($data){
 
         $this->hashPassword($data);
-        return $this->model->create($data);
+
+        $model = $this->model->create($data);
+
+        if(isset($data['roles'])){
+            $roles = $data['roles'];
+        }else{
+            $roles[0] = "user";
+        }
+
+        $model->syncRoles($roles);
+
+        return $model;
 
     }
 
