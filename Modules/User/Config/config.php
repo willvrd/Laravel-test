@@ -19,6 +19,8 @@ return [
         "user.permissions.create",
         "user.permissions.update",
         "user.permissions.delete",
+        "user.permissions.assign",
+        "user.permissions.revoke",
     ]
 
 

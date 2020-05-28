@@ -6,28 +6,28 @@ namespace Modules\User\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-use Modules\User\Http\Requests\CreateRoleRequest;
-use Modules\User\Http\Requests\AssignRoleRequest;
-use Modules\User\Http\Requests\UnAssignRoleRequest;
+use Modules\User\Http\Requests\CreatePermissionRequest;
+use Modules\User\Http\Requests\AssignPermissionRequest;
+use Modules\User\Http\Requests\RevokePermissionRequest;
 
 // Base
 use Modules\Core\Http\Controllers\Api\CoreApiController;
 
 // Repositories
-use Modules\User\Repositories\RoleRepository;
+use Modules\User\Repositories\PermissionRepository;
 
 // Transformers
-use Modules\User\Transformers\RoleTransformer;
+use Modules\User\Transformers\PermissionTransformer;
 
-class RoleApiController extends CoreApiController
+class PermissionApiController extends CoreApiController
 {
 
-    private $role;
+    private $permission;
 
     public function __construct(
-        RoleRepository $role
+        PermissionRepository $permission
     ){
-        $this->role = $role;
+        $this->permission = $permission;
     }
 
     /**
@@ -40,13 +40,13 @@ class RoleApiController extends CoreApiController
         try {
 
             //Request to Repository
-            $roles = $this->role->getItemsBy($this->getParamsRequest($request));
+            $permissions = $this->permission->getItemsBy($this->getParamsRequest($request));
 
             //Response
-            $response = ['data' => RoleTransformer::collection($roles)];
+            $response = ['data' => PermissionTransformer::collection($permissions)];
 
             //If request pagination add meta-page
-            $request->page ? $response['meta'] = ['page' => $this->pageTransformer($roles)] : false;
+            $request->page ? $response['meta'] = ['page' => $this->pageTransformer($permissions)] : false;
 
 
         } catch (\Exception $e) {
@@ -68,13 +68,13 @@ class RoleApiController extends CoreApiController
     {
         try {
             //Request to Repository
-            $role = $this->role->getItem($criteria,$this->getParamsRequest($request));
+            $permission = $this->permission->getItem($criteria,$this->getParamsRequest($request));
 
             //Break if no found item
-            if (!$role) throw new \Exception('Item not found', 204);
+            if (!$permission) throw new \Exception('Item not found', 204);
 
             $response = [
-                'data' => $role ? new RoleTransformer($role) : '',
+                'data' => $permission ? new PermissionTransformer($permission) : '',
             ];
 
         } catch (\Exception $e) {
@@ -99,11 +99,11 @@ class RoleApiController extends CoreApiController
 
             $data = $request['attributes'] ?? [];
 
-            $this->validateRequestApi(new CreateRoleRequest($data));
+            $this->validateRequestApi(new CreatePermissionRequest($data));
 
-            $role = $this->role->create($data);
+            $permission = $this->permission->create($data);
 
-            $response = ["data" => new RoleTransformer($role)];
+            $response = ["data" => new PermissionTransformer($permission)];
 
             \DB::commit();
 
@@ -131,19 +131,19 @@ class RoleApiController extends CoreApiController
 
             $data = $request['attributes'] ?? [];
 
-            $this->validateRequestApi(new CreateRoleRequest($data));
+            $this->validateRequestApi(new CreatePermissionRequest($data));
 
             $params = $this->getParamsRequest($request);
 
             // Search entity
-            $entity = $this->role->getItem($criteria,$params);
+            $entity = $this->permission->getItem($criteria,$params);
 
             //Break if no found item
             if (!$entity) throw new \Exception('Item not found', 204);
 
-            $role = $this->role->update($entity,$data);
+            $permission = $this->permission->update($entity,$data);
 
-            $response = ['data' => new RoleTransformer($role)];
+            $response = ['data' => new PermissionTransformer($permission)];
 
             \DB::commit();
 
@@ -169,12 +169,12 @@ class RoleApiController extends CoreApiController
             $params = $this->getParamsRequest($request);
 
             // Search entity
-            $entity = $this->role->getItem($criteria,$params);
+            $entity = $this->permission->getItem($criteria,$params);
 
             //Break if no found item
             if (!$entity) throw new \Exception('Item not found', 204);
 
-            $this->role->destroy($entity);
+            $this->permission->destroy($entity);
 
             $response = ['data' => 'Item deleted'];
 
@@ -189,9 +189,10 @@ class RoleApiController extends CoreApiController
 
     }
 
-    /** Assign Role User
-     * @param Request $request
-     */
+
+    /** Assign Permission
+    * @param Request $request
+    */
     public function assign(Request $request){
 
         \DB::beginTransaction();
@@ -200,11 +201,11 @@ class RoleApiController extends CoreApiController
 
             $data = $request['attributes'] ?? [];
 
-            $this->validateRequestApi(new AssignRoleRequest($data));
+            $this->validateRequestApi(new AssignPermissionRequest($data));
 
-            $this->role->assign($data);
+            $this->permission->assign($data);
 
-            $response = ['data' => 'Role(s) assigned to User'];
+            $response = ['data' => 'Permission(s) assigned to Role'];
 
             \DB::commit();
 
@@ -217,10 +218,10 @@ class RoleApiController extends CoreApiController
         return response()->json($response, $status ?? 200);
     }
 
-    /** Revoke Role User
-     * @param Request $request
-     */
-    public function unassign(Request $request){
+    /** Revoke Permission
+    * @param Request $request
+    */
+    public function revoke(Request $request){
 
         \DB::beginTransaction();
 
@@ -228,11 +229,11 @@ class RoleApiController extends CoreApiController
 
             $data = $request['attributes'] ?? [];
 
-            $this->validateRequestApi(new UnAssignRoleRequest($data));
+            $this->validateRequestApi(new RevokePermissionRequest($data));
 
-            $this->role->unassign($data);
+            $this->permission->revoke($data);
 
-            $response = ['data' => 'Role unassigned to User'];
+            $response = ['data' => 'Permission revoked'];
 
             \DB::commit();
 

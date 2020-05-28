@@ -162,6 +162,17 @@ class UserServiceProvider extends ServiceProvider
             }
         );
 
+        $this->app->bind(
+            'Modules\User\Repositories\PermissionRepository',
+            function () {
+                $repository = new \Modules\User\Repositories\Eloquent\EloquentPermissionRepository(new \Modules\User\Entities\Permission());
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+                return new \Modules\User\Repositories\Cache\CachePermissionDecorator($repository);
+            }
+        );
+
     }
 
 }

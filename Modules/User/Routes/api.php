@@ -26,4 +26,7 @@ Route::prefix('/user/v1')->name($locale.'.api.user')->group(function(){
     //======  ROLES
     require('ApiRoutes/roleRoutes.php');
 
+    //======  PERMISSIONS
+    require('ApiRoutes/permissionRoutes.php');
+
 });
