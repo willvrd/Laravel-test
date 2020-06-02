@@ -2,12 +2,7 @@
     "name": "User",
     "alias": "user",
     "description": "User Module",
-    "authors": [
-        {
-            "name": "William Verde",
-            "email": "wavutes@gmail.com"
-        }
-    ],
+    "version": "0.0.1",
     "keywords": [],
     "order": 0,
     "providers": [
