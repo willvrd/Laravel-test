@@ -37,6 +37,7 @@ class UserServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('super-admin') ? true : null;
         });
+
     }
 
     /**
@@ -143,7 +144,7 @@ class UserServiceProvider extends ServiceProvider
         $this->app->bind(
             'Modules\User\Repositories\UserRepository',
             function () {
-                $repository = new \Modules\User\Repositories\Eloquent\EloquentUserRepository(new \App\User());
+                $repository = new \Modules\User\Repositories\Eloquent\EloquentUserRepository(new \Modules\User\Entities\User());
                 if (! config('app.cache')) {
                     return $repository;
                 }
