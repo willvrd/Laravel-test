@@ -1,7 +1,8 @@
 {
     "name": "Core",
     "alias": "core",
-    "description": "",
+    "description": "Core Module",
+    "version": "0.0.1",
     "keywords": [],
     "order": 0,
     "providers": [
