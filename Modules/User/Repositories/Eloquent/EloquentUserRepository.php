@@ -18,10 +18,13 @@ class EloquentUserRepository extends EloquentBaseRepository implements UserRepos
 
         $model = $this->model->create($data);
 
+        $roles[0] = "user";
         if(isset($data['roles'])){
-            $roles = $data['roles'];
-        }else{
-            $roles[0] = "user";
+            if((in_array("super-admin",$data['roles']) || in_array("admin",$data['roles'])) && !(\Auth::check())){
+                $roles[0] = "user";
+            }else{
+                $roles = $data['roles'];
+            }
         }
 
         $model->syncRoles($roles);
