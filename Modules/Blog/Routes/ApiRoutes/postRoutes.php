@@ -12,7 +12,6 @@ Route::prefix('/posts')->name('.posts')->middleware('auth:api')->group(function(
     ->name('.show')
     ->middleware('can:blog.posts.index');
 
-    /*
     Route::post('/', 'Api\PostApiController@create')
     ->name('.create')
     ->middleware('can:blog.posts.create');
@@ -24,8 +23,5 @@ Route::prefix('/posts')->name('.posts')->middleware('auth:api')->group(function(
     Route::delete('/{criteria}', 'Api\PostApiController@delete')
     ->name('.delete')
     ->middleware('can:blog.posts.delete');
-
-    */
-
 
 });
