@@ -40,13 +40,26 @@
                             </li>
 
                             {{-- USER MODULE --}}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">{{ __('User') }}</a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ __('User') }}
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('admin.user.users.index') }}">
+                                        {{ __('Users') }}
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="{{ route('admin.user.passport.index') }}">
+                                        {{ __('Passport') }}
+                                    </a>
+
+                                </div>
+
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.passport.index') }}">{{ __('Passport') }}</a>
-                            </li>
 
                             {{-- BLOG MODULE --}}
                             <li class="nav-item dropdown">

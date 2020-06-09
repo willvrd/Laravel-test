@@ -11,11 +11,12 @@
 |
 */
 
-$locale = \App::getLocale();
+Route::middleware('auth')->prefix('/user')->name('.user')->group(function(){
 
-Route::prefix('/user')->name($locale.'.user')->group(function(){
+    //======  USERS
+    require('BackendRoutes/userRoutes.php');
 
-
-
+    //======  Passport
+    require('BackendRoutes/passportRoutes.php');
 
 });
