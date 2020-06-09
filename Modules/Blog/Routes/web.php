@@ -11,6 +11,11 @@
 |
 */
 
-Route::prefix('blog')->group(function() {
-    Route::get('/', 'BlogController@index');
+$locale = \App::getLocale();
+
+Route::prefix('/blog')->name($locale.'.blog')->group(function(){
+
+
+
+
 });

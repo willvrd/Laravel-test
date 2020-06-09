@@ -39,6 +39,7 @@ class BlogServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->registerBindings();
     }
 
     /**
@@ -122,4 +123,26 @@ class BlogServiceProvider extends ServiceProvider
         }
         return $paths;
     }
+
+
+    private function registerBindings()
+    {
+
+        $this->app->bind(
+            'Modules\Blog\Repositories\PostRepository',
+            function () {
+                $repository = new \Modules\Blog\Repositories\Eloquent\EloquentPostRepository(new \Modules\Blog\Entities\Post());
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+                return new \Modules\Blog\Repositories\Cache\CachePostDecorator($repository);
+            }
+        );
+
+
+
+
+    }
+
+
 }

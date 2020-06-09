@@ -1,0 +1,5 @@
+url: https://github.com/willvrd/blog-module
+versions:
+  "0.0.1":
+      added:
+        - Initial version
