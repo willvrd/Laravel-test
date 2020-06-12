@@ -12,7 +12,7 @@
 */
 
 /*
-* name: locale.backend.blog
+* name: locale.admin.blog
 */
 
 Route::middleware('auth')->prefix('/blog')->name('.blog')->group(function(){

@@ -1,7 +1,7 @@
 <?php
 
 /*
-* name: locale.backend.blog.posts
+* name: locale.admin.blog.posts
 */
 
  //Posts

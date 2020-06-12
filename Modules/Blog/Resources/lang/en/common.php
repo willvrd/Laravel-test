@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'module' => 'Blog',
     'list resource' => '',
     'create resource' => '',
     'edit resource' => '',
