@@ -14,13 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// View Home
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => LaravelLocalization::setLocale()], function()
+{
+    // View Home
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    // Auth Base Laravel
+    Auth::routes();
+
+    // View Home User
+    Route::get('/home', 'HomeController@index')->name('home');
+
 });
-
-// Auth Base Laravel
-Auth::routes();
-
-// View Home User
-Route::get('/home', 'HomeController@index')->name('home');
