@@ -1,5 +1,9 @@
 <?php
 
+/*
+* name: locale.backend.blog.posts
+*/
+
  //Posts
  Route::prefix('posts')->name('.posts')->group(function () {
 

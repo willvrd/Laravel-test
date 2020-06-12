@@ -11,7 +11,7 @@
 
                 <div class="card-body">
 
-                    This view is loaded from module: {!! config('blog.name') !!}
+                    {{ __("blog::common.messages.welcome") }}: {!! config('blog.name') !!}
 
                 </div>
             </div>

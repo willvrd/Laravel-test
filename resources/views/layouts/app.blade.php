@@ -69,7 +69,7 @@
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{route(app()->getLocale().'.backend.blog.posts.index')}}">
-                                        {{ __('Posts') }}
+                                        {{ __('blog::posts.title.posts') }}
                                     </a>
                                 </div>
                             </li>

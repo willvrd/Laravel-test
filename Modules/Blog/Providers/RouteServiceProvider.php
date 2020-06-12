@@ -47,7 +47,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapBackendRoutes()
     {
-        Route::prefix('backend')
+
+        Route::prefix(\App::getLocale().'/backend')
+            ->name(\App::getLocale().'.backend')
             ->middleware('web')
             ->namespace($this->moduleNamespace)
             ->group(module_path('Blog', '/Routes/backend.php'));

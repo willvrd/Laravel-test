@@ -11,9 +11,14 @@
 |
 */
 
+/*
+* name: locale.backend.blog
+*/
+
 $locale = \App::getLocale();
 
-Route::middleware('auth')->prefix('/blog')->name($locale.'.backend.blog')->group(function(){
+
+Route::middleware('auth')->prefix('/blog')->name('.blog')->group(function(){
 
     //======  POSTS
     require('BackendRoutes/postRoutes.php');
