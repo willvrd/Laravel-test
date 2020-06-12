@@ -42,18 +42,18 @@
                             {{-- USER MODULE --}}
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ __('User') }}
+                                    {{ __('user::common.module') }}
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('admin.user.users.index') }}">
-                                        {{ __('Users') }}
+                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.users.index')}}">
+                                        {{ __('user::users.title.users') }}
                                     </a>
 
                                     <div class="dropdown-divider"></div>
 
-                                    <a class="dropdown-item" href="{{ route('admin.user.passport.index') }}">
-                                        {{ __('Passport') }}
+                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.passport.index')}}">
+                                        {{ __('user::passport.title.passport') }}
                                     </a>
 
                                 </div>

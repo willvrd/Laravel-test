@@ -1,5 +1,9 @@
 <?php
 
+/*
+* name: locale.admin.user.users
+*/
+
  Route::prefix('users')->name('.users')->group(function () {
 
     // Index

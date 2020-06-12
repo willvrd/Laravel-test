@@ -11,7 +11,7 @@
 
                 <div class="card-body">
 
-                    This view is loaded from module: {!! config('user.name') !!}
+                    {{ __("user::common.messages.welcome") }}: {!! config('user.name') !!}
 
                 </div>
             </div>

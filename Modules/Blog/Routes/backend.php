@@ -15,9 +15,6 @@
 * name: locale.backend.blog
 */
 
-$locale = \App::getLocale();
-
-
 Route::middleware('auth')->prefix('/blog')->name('.blog')->group(function(){
 
     //======  POSTS

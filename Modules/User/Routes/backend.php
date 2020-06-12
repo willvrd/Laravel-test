@@ -11,6 +11,10 @@
 |
 */
 
+/*
+* name: locale.admin.user
+*/
+
 Route::middleware('auth')->prefix('/user')->name('.user')->group(function(){
 
     //======  USERS
