@@ -3,6 +3,7 @@
 ## Requirements
     - Laravel Modules
     - Laravel Localization
+    - Laravel Translatable
 
 ## Steps
 
@@ -11,4 +12,7 @@
     1. Installation:    https://github.com/mcamara/laravel-localization#installation
     2. Usage:           https://github.com/mcamara/laravel-localization#usage
 
+### Laravel Translatable
+
+    1. Installation:    https://docs.astrotomic.info/laravel-translatable/installation
 
