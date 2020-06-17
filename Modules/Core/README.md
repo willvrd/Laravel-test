@@ -4,6 +4,7 @@
     - Laravel Modules
     - Laravel Localization
     - Laravel Translatable
+    - Eloquent Sluggable
 
 ## Steps
 
@@ -15,4 +16,10 @@
 ### Laravel Translatable
 
     1. Installation:    https://docs.astrotomic.info/laravel-translatable/installation
+
+### Eloquent Sluggable
+
+    1. Installation:    https://github.com/cviebrock/eloquent-sluggable#installation
+    2. Usage:           https://github.com/cviebrock/eloquent-sluggable#updating-your-eloquent-models
+
 
