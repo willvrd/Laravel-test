@@ -5,6 +5,7 @@
     - Laravel Localization
     - Laravel Translatable
     - Eloquent Sluggable
+    - Laracast Presenter
 
 ## Steps
 
@@ -21,5 +22,9 @@
 
     1. Installation:    https://github.com/cviebrock/eloquent-sluggable#installation
     2. Usage:           https://github.com/cviebrock/eloquent-sluggable#updating-your-eloquent-models
+
+### Laracast Presenter
+
+    1. Installation:    https://github.com/laracasts/Presenter
 
 

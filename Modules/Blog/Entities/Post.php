@@ -5,13 +5,16 @@ namespace Modules\Blog\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Laracasts\Presenter\PresentableTrait;
+use Modules\Blog\Presenters\PostPresenter;
 
 class Post extends Model implements TranslatableContract
 {
 
-    use Translatable;
+    use Translatable, PresentableTrait;
 
     protected $table = 'blog_posts';
+    protected $presenter = PostPresenter::class;
 
     protected $fillable = [
         'user_id',
