@@ -16,6 +16,17 @@
         ```
         php artisan user:role-permission:init
         ```
+## End Points
+
+Route Base: `https://yourhost.com/api/user/v1/`
+
+* #### User
+
+* #### Auth
+
+* #### Role
+
+* #### Permission
 
 ## Backend
 
