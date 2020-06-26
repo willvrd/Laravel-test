@@ -40,6 +40,11 @@ class Post extends Model implements TranslatableContract
         return $this->belongsTo("Modules\User\Entities\User");
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'blog_post_category');
+    }
+
     public function getOptionsAttribute($value)
     {
         try {

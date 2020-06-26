@@ -24,8 +24,9 @@ class PostTransformer extends JsonResource
             'user_id' => $this->when($this->user_id, $this->user_id),
             'user' => new UserTransformer($this->whenLoaded('user')),
             'options' => $this->when($this->options, $this->options),
-            'createdAt' => $this->when($this->created_at, $this->created_at),
-            'updatedAt' => $this->when($this->updated_at, $this->updated_at)
+            'categories' => CategoryTransformer::collection($this->whenLoaded('categories')),
+            'createdAt' => $this->when($this->created_at, $this->created_at->format('Y-m-d H:i:s')),
+            'updatedAt' => $this->when($this->updated_at, $this->updated_at->format('Y-m-d H:i:s'))
         ];
 
         $filter = json_decode($request->filter);

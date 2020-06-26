@@ -117,6 +117,26 @@ class EloquentPostRepository extends EloquentBaseRepository implements PostRepos
 
     }
 
+    public function create($data){
 
+        $model = $this->model->create($data);
+
+        if (isset($data['categories']))
+            $model->categories()->sync($data['categories']);
+
+        return $model;
+
+    }
+
+    public function update($model, $data){
+
+        $model->update($data);
+
+        if (isset($data['categories']))
+            $model->categories()->sync($data['categories']);
+
+        return $model;
+
+    }
 
 }

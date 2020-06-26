@@ -41,6 +41,11 @@ class Category extends Model implements TranslatableContract
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'blog_post_category');
+    }
+
     public function getOptionsAttribute($value)
     {
         try {

@@ -21,8 +21,9 @@ class CategoryTransformer extends JsonResource
             'parentId' => $this->when($this->parent_id, $this->parent_id),
             'parent' => new CategoryTransformer($this->whenLoaded('parent')),
             'children' => CategoryTransformer::collection($this->whenLoaded('children')),
-            'createdAt' => $this->when($this->created_at, $this->created_at),
-            'updatedAt' => $this->when($this->updated_at, $this->updated_at)
+            'posts' => PostTransformer::collection($this->whenLoaded('posts')),
+            'createdAt' => $this->when($this->created_at, $this->created_at->format('Y-m-d H:i:s')),
+            'updatedAt' => $this->when($this->updated_at, $this->updated_at->format('Y-m-d H:i:s'))
         ];
 
         $filter = json_decode($request->filter);
