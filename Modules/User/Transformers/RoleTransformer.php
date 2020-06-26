@@ -14,8 +14,8 @@ class RoleTransformer extends JsonResource
             'guardName' => $this->when($this->guardName, $this->guardName),
             'permissions' => PermissionTransformer::collection($this->whenLoaded('permissions')),
             'users' => UserTransformer::collection($this->whenLoaded('users')),
-            'createdAt' => $this->when($this->created_at, $this->created_at),
-            'updatedAt' => $this->when($this->updated_at, $this->updated_at)
+            'createdAt' => $this->when($this->created_at, $this->created_at->format('Y-m-d H:i:s')),
+            'updatedAt' => $this->when($this->updated_at, $this->updated_at->format('Y-m-d H:i:s'))
         ];
 
         return $item;
