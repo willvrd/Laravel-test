@@ -139,6 +139,17 @@ class BlogServiceProvider extends ServiceProvider
             }
         );
 
+        $this->app->bind(
+            'Modules\Blog\Repositories\CategoryRepository',
+            function () {
+                $repository = new \Modules\Blog\Repositories\Eloquent\EloquentCategoryRepository(new \Modules\Blog\Entities\Category());
+                if (! config('app.cache')) {
+                    return $repository;
+                }
+                return new \Modules\Blog\Repositories\Cache\CacheCategoryDecorator($repository);
+            }
+        );
+
 
 
 

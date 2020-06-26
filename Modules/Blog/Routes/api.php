@@ -17,8 +17,8 @@ $locale = \App::getLocale();
 
 Route::prefix('/blog/v1')->name($locale.'.api.blog')->group(function(){
 
-    //======  POSTS
     require('ApiRoutes/postRoutes.php');
 
+    require('ApiRoutes/categoryRoutes.php');
 
 });

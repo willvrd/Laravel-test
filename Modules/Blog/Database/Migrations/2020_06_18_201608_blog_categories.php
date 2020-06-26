@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BlogPosts extends Migration
+class BlogCategories extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,14 @@ class BlogPosts extends Migration
      */
     public function up()
     {
-
-        Schema::create('blog_posts', function (Blueprint $table) {
+        Schema::create('blog_categories', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->bigIncrements('id');
+
+            $table->integer('parent_id')->default(0);
             $table->text('options')->default('')->nullable();
-            $table->integer('status')->default(0)->unsigned();
-            $table->foreignId('user_id')->constrained()->onDelete('restrict');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -32,6 +30,6 @@ class BlogPosts extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog_posts');
+        Schema::dropIfExists('blog_categories');
     }
 }
