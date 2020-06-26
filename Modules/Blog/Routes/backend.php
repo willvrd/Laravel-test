@@ -17,8 +17,7 @@
 
 Route::middleware('auth')->prefix('/blog')->name('.blog')->group(function(){
 
-    //======  POSTS
     require('BackendRoutes/postRoutes.php');
-
+    require('BackendRoutes/categoryRoutes.php');
 
 });

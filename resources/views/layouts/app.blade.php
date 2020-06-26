@@ -71,7 +71,13 @@
                                     <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.blog.posts.index')}}">
                                         {{ __('blog::posts.title.posts') }}
                                     </a>
+
+                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.blog.categories.index')}}">
+                                        {{ __('blog::categories.title.categories') }}
+                                    </a>
+
                                 </div>
+
                             </li>
 
 
