@@ -13,9 +13,21 @@
 
 $locale = \App::getLocale();
 
+/*
+* name: locale.user
+*/
 Route::prefix('/user')->name($locale.'.user')->group(function(){
 
 
 
+
+});
+
+/*
+* name: locale.auth
+*/
+Route::prefix('/auth')->name($locale.'.auth')->group(function(){
+
+    require('WebRoutes/authRoutes.php');
 
 });

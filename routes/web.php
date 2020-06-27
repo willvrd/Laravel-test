@@ -22,7 +22,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     });
 
     // Auth Base Laravel
-    Auth::routes();
+    //Auth::routes();
 
     // View Home User
     Route::get('/home', 'HomeController@index')->name('home');
