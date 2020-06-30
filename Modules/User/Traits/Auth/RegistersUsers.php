@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Auth;
+namespace Modules\User\Traits\Auth;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ trait RegistersUsers
      */
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('user::auth.register');
     }
 
     /**
