@@ -10882,3 +10882,7 @@ a.text-dark:focus {
   }
 }
 
+#cardLocale {
+  z-index: 1;
+}
+

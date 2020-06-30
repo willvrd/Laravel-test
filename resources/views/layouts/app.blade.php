@@ -21,6 +21,9 @@
 </head>
 <body>
     <div id="app">
+
+        @include('partials.header')
+
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -40,46 +43,10 @@
                             </li>
 
                             {{-- USER MODULE --}}
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ __('user::common.module') }}
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.users.index')}}">
-                                        {{ __('user::users.title.users') }}
-                                    </a>
-
-                                    <div class="dropdown-divider"></div>
-
-                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.passport.index')}}">
-                                        {{ __('user::passport.title.passport') }}
-                                    </a>
-
-                                </div>
-
-                            </li>
-
+                            @include('user::admin.partials.menu')
 
                             {{-- BLOG MODULE --}}
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ __('blog::common.module') }}
-                                </a>
-
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.blog.posts.index')}}">
-                                        {{ __('blog::posts.title.posts') }}
-                                    </a>
-
-                                    <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.blog.categories.index')}}">
-                                        {{ __('blog::categories.title.categories') }}
-                                    </a>
-
-                                </div>
-
-                            </li>
-
+                            @include('blog::admin.partials.menu')
 
                         @endif
 

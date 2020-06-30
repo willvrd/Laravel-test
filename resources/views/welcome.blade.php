@@ -67,6 +67,9 @@
         </style>
     </head>
     <body>
+
+        @include('partials.header')
+
         <div class="flex-center position-ref full-height">
             @if (Route::has(app()->getLocale().'.auth.login'))
                 <div class="top-right links">
