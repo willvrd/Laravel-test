@@ -3,7 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mb-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -18,4 +18,12 @@
         </div>
     </div>
 </div>
+
+<user-index></user-index>
+
 @endsection
+
+<!-- User Scripts -->
+@section('scripts-modules')
+    <script src="{{ mix('js/user.js') }}"></script>
+@stop

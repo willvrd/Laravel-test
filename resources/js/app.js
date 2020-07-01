@@ -43,6 +43,10 @@ Vue.component(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+
+const moduleVueFiles = require.context('../../Modules', true, /\.vue$/i);
+moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], moduleVueFiles(key).default));
+
 const app = new Vue({
     el: '#app',
 });

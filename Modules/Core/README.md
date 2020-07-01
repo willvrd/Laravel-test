@@ -9,6 +9,21 @@
 
 ## Steps
 
+### Assets
+
+    1.Install and Setup
+        https://nwidart.com/laravel-modules/v6/basic-usage/compiling-assets
+
+    2.Add in your main app.js:
+
+´´´
+const moduleVueFiles = require.context('../../Modules', true, /\.vue$/i);
+moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], moduleVueFiles(key).default));
+´´´
+
+    3. run npm run dev
+
+
 ### Laravel Localization
 
     1. Installation:    https://github.com/mcamara/laravel-localization#installation
