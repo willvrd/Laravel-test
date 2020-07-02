@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user::.admin.index');
+        return view('user::.admin.users.index');
     }
 
     /**

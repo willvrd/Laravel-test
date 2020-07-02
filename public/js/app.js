@@ -2026,14 +2026,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    title: String,
+    moduleName: String,
+    initMsj: String
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
   },
   data: function data() {
     return {
-      moduleName: "User",
-      initMsj: "Componente del Modulo"
+      loading: false
     };
   }
 });
@@ -39300,7 +39307,11 @@ var render = function() {
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("User - Component - user-index")
+            _vm._v(
+              "\n                    " +
+                _vm._s(_vm.title) +
+                "\n                "
+            )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
