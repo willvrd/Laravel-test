@@ -6,6 +6,7 @@
     - Laravel Translatable
     - Eloquent Sluggable
     - Laracast Presenter
+    - Laravel Debugbar
 
 ## Steps
 
@@ -42,4 +43,8 @@ moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0
 
     1. Installation:    https://github.com/laracasts/Presenter
 
+### Laravel Debugbar
+
+    1. Installation:    https://github.com/barryvdh/laravel-debugbar
+    
 

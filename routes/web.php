@@ -25,6 +25,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     //Auth::routes();
 
     // View Home User
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/backend', 'HomeController@index')->name('backend');
 
 });

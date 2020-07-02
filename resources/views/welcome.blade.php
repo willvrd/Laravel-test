@@ -74,7 +74,7 @@
             @if (Route::has(app()->getLocale().'.auth.login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <a href="{{ route('backend') }}">{{ __('Backend') }}</a>
                     @else
                         <a href="{{ route(app()->getLocale().'.auth.login') }}">{{ __('Login') }}</a>
 

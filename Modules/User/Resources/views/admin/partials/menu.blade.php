@@ -14,6 +14,15 @@
         <div class="dropdown-divider"></div>
         @endcan
 
+        @can("user.roles.index")
+        {{--
+        <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.roles.index')}}">
+            {{ __('user::roles.title.roles') }}
+        </a>
+        <div class="dropdown-divider"></div>
+        --}}
+        @endcan
+
         <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.passport.index')}}">
             {{ __('user::passport.title.passport') }}
         </a>

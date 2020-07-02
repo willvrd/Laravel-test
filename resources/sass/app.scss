@@ -8,6 +8,25 @@
 @import '~bootstrap/scss/bootstrap';
 
 
+.bg-primary{
+    background-color: $green !important;
+}
+
+.card-header,
+.list-group-item-primary{
+    @extend .bg-primary;
+}
+
+a{
+    color: $green;
+}
+
+.list-group-item-primary{
+    a{
+        color: white;
+    }
+}
+
 #cardLocale{
     z-index: 1;
 }

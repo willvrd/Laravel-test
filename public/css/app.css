@@ -6954,14 +6954,24 @@ a.close.disabled {
   vertical-align: text-top !important;
 }
 
-.bg-primary {
+.bg-primary,
+.card-header,
+.list-group-item-primary {
   background-color: #3490dc !important;
 }
 
 a.bg-primary:hover,
+a.card-header:hover,
+a.list-group-item-primary:hover,
 a.bg-primary:focus,
+a.card-header:focus,
+a.list-group-item-primary:focus,
 button.bg-primary:hover,
-button.bg-primary:focus {
+button.card-header:hover,
+button.list-group-item-primary:hover,
+button.bg-primary:focus,
+button.card-header:focus,
+button.list-group-item-primary:focus {
   background-color: #2176bd !important;
 }
 
@@ -10880,6 +10890,20 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+.bg-primary,
+.card-header,
+.list-group-item-primary {
+  background-color: #38c172 !important;
+}
+
+a {
+  color: #38c172;
+}
+
+.list-group-item-primary a {
+  color: white;
 }
 
 #cardLocale {
