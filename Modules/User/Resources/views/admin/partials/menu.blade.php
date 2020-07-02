@@ -8,21 +8,18 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
         @can("user.users.index")
-        <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.users.index')}}">
-            {{ __('user::users.title.users') }}
-        </a>
-        <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.users.index')}}">
+                {{ __('user::users.title.users') }}
+            </a>
         @endcan
 
         @can("user.roles.index")
-        {{--
-        <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.roles.index')}}">
-            {{ __('user::roles.title.roles') }}
-        </a>
-        <div class="dropdown-divider"></div>
-        --}}
+            <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.roles.index')}}">
+                {{ __('user::roles.title.roles') }}
+            </a>
         @endcan
 
+        <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.passport.index')}}">
             {{ __('user::passport.title.passport') }}
         </a>
