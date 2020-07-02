@@ -8,9 +8,20 @@
 @import '~bootstrap/scss/bootstrap';
 
 
+//============================================ Backgrounds
+
 .bg-primary{
-    background-color: $green !important;
+    background-color: $primary !important;
 }
+
+//============================================ Buttons
+
+.btn-primary{
+    background-color: $primary;
+    border-color: $primary;
+}
+
+//============================================
 
 .card-header,
 .list-group-item-primary{
@@ -18,7 +29,7 @@
 }
 
 a{
-    color: $green;
+    color: $primary;;
 }
 
 .list-group-item-primary{

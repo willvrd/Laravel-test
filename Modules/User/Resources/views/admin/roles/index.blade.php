@@ -4,7 +4,11 @@
 
 @section('content')
 
-    <h1>Rolesss</h1>
+    <role-index
+        title="{{ __("user::roles.title.roles") }}"
+        module-name="{!! config('user.name') !!}"
+        init-msj="{{ __("user::common.messages.welcome") }}">
+    </role-index>
 
 @endsection
 

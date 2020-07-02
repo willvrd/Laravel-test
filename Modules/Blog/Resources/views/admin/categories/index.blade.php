@@ -3,19 +3,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Blog - Categories - Index</div>
 
-                <div class="card-body">
+    <category-index
+        title="{{ __("blog::categories.title.categories") }}"
+        module-name="{!! config('blog.name') !!}"
+        init-msj="{{ __("blog::common.messages.welcome") }}">
+    </category-index>
 
-                    {{ __("blog::common.messages.welcome") }}: {!! config('blog.name') !!}
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
