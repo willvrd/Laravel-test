@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 
 $locale = \App::getLocale();
 
+/*
+* name: locale.api.user
+*/
+
 Route::prefix('/user/v1')->name($locale.'.api.user')->group(function(){
 
     //======  USERS

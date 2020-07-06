@@ -2,6 +2,10 @@
 
 use Illuminate\Http\Request;
 
+/*
+* name: locale.api.user.roles
+*/
+
 Route::prefix('/roles')->name('.roles')->middleware('auth:api')->group(function(){
 
     Route::get('/', 'Api\RoleApiController@index')

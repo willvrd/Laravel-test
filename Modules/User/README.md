@@ -2,12 +2,13 @@
 
 ## Requirements
     - Laravel Passport
-    - Laravel Permissions
+    - Permissions
 
 ## Steps
 
     1. Go to Config/auth.php
         - Change the model from provider to: Modules\User\Entities\User::class,
+        
     2. Run migration:
         ```
         php artisan module:migrate User
@@ -16,6 +17,32 @@
         ```
         php artisan user:role-permission:init
         ```
+### Assets
+
+    1. cd Modules/User
+    2. npm install
+    3. npm run dev
+    4. In your view add:
+    
+ ```    
+@section('scripts-modules')
+    <script src="{{ mix('js/user.js') }}"></script>
+@stop
+ ```
+
+ ### Laravel Passport
+
+    1. Installation:    https://laravel.com/docs/7.x/passport#installation
+
+    - Consuming Your API With JavaScript:
+        https://laravel.com/docs/7.x/passport#consuming-your-api-with-javascript
+
+ ### Permissions
+
+    1. Installation:    https://docs.spatie.be/laravel-permission/v3/installation-laravel/
+    2. Usage:           https://docs.spatie.be/laravel-permission/v3/basic-usage/basic-usage/
+
+
 ## End Points
 
 Route Base: `https://yourhost.com/api/user/v1/`
@@ -32,21 +59,8 @@ Route Base: `https://yourhost.com/api/user/v1/`
 
     ### Pages
     
-        Index:  http://mysite/backend/user/users
-        name:   admin.user.users.index
+        Index:  http://mysite/en/backend/user/users
+        name:   locale.admin.user.users.index
 
-## Assets
-
-    1. cd Modules/User
-    2. npm install
-    3. npm run dev
-    4. In your view add:
-    
- ```    
-@section('scripts-modules')
-    <script src="{{ mix('js/user.js') }}"></script>
-@stop
- ```
-
-
-
+        Index:  http://mysite/en/backend/user/roles
+        name:   locale.admin.user.roles.index
