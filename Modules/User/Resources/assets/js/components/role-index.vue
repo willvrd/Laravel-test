@@ -9,11 +9,11 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
+        <div v-if="success" class="row justify-content-center">
 
             <div class="col-md-9">
 
-                <section v-if="errored && !loading" >
+                <section v-if="errored" >
                     <div class="alert alert-danger my-5" role="alert">
                        Sorry, no results available.
                     </div>
@@ -70,7 +70,7 @@
 
             <div class="col-md-3">
 
-                <section v-if="!loading">
+                <section class="forms">
 
                     <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
                         <div class="card">
@@ -124,6 +124,7 @@ export default {
     },
     mounted() {
         this.init();
+        this.success = true
     },
     data() {
         return {

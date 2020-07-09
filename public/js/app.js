@@ -2322,6 +2322,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.init();
+    this.success = true;
   },
   data: function data() {
     return {
@@ -39803,112 +39804,112 @@ var render = function() {
         : _vm._e()
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "row justify-content-center" }, [
-      _c("div", { staticClass: "col-md-9" }, [
-        _vm.errored && !_vm.loading
-          ? _c("section", [
-              _c(
-                "div",
-                {
-                  staticClass: "alert alert-danger my-5",
-                  attrs: { role: "alert" }
-                },
-                [
-                  _vm._v(
-                    "\n                   Sorry, no results available.\n                "
-                  )
-                ]
-              )
-            ])
-          : _c("section", [
-              !_vm.loading
-                ? _c("div", { staticClass: "card" }, [
-                    _c(
-                      "div",
-                      {
-                        staticClass:
-                          "card-header text-uppercase font-weight-bold"
-                      },
-                      [_vm._v(_vm._s(_vm.title))]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-body" }, [
-                      _c("table", { staticClass: "table" }, [
-                        _vm._m(1),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.data, function(item, index) {
-                            return _c("tr", { key: index }, [
-                              _c("th", { attrs: { scope: "row" } }, [
-                                _vm._v(_vm._s(item.id))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(item.name))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(item.createdAt))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-outline-primary",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.editForm(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Edit\n                                        "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-outline-danger",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.deleteItem(item, index)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Delete\n                                        "
-                                    )
-                                  ]
-                                )
-                              ])
-                            ])
-                          }),
-                          0
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "card-footer" }, [
+    _vm.success
+      ? _c("div", { staticClass: "row justify-content-center" }, [
+          _c("div", { staticClass: "col-md-9" }, [
+            _vm.errored
+              ? _c("section", [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "alert alert-danger my-5",
+                      attrs: { role: "alert" }
+                    },
+                    [
                       _vm._v(
-                        "\n                        " +
-                          _vm._s(_vm.initMsj) +
-                          " : " +
-                          _vm._s(_vm.moduleName) +
-                          "\n                    "
+                        "\n                   Sorry, no results available.\n                "
                       )
-                    ])
-                  ])
-                : _vm._e()
-            ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-3" }, [
-        !_vm.loading
-          ? _c("section", [
+                    ]
+                  )
+                ])
+              : _c("section", [
+                  !_vm.loading
+                    ? _c("div", { staticClass: "card" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "card-header text-uppercase font-weight-bold"
+                          },
+                          [_vm._v(_vm._s(_vm.title))]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("table", { staticClass: "table" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.data, function(item, index) {
+                                return _c("tr", { key: index }, [
+                                  _c("th", { attrs: { scope: "row" } }, [
+                                    _vm._v(_vm._s(item.id))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(item.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(item.createdAt))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-primary",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editForm(item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Edit\n                                        "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-danger",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteItem(item, index)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Delete\n                                        "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ])
+                              }),
+                              0
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-footer" }, [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(_vm.initMsj) +
+                              " : " +
+                              _vm._s(_vm.moduleName) +
+                              "\n                    "
+                          )
+                        ])
+                      ])
+                    : _vm._e()
+                ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3" }, [
+            _c("section", { staticClass: "forms" }, [
               _vm.modeUpdate
                 ? _c(
                     "form",
@@ -40055,9 +40056,9 @@ var render = function() {
                   ])
                 : _vm._e()
             ])
-          : _vm._e()
-      ])
-    ])
+          ])
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
