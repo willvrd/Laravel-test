@@ -1,13 +1,7 @@
 <template>
     <div class="container">
 
-        <div class="row justify-content-center">
-            <div v-if="loading" class="text-center mt-5">
-                <div class="spinner-border text-success" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-        </div>
+        <section v-if="loading"><loading></loading></section>
 
         <div v-if="success" class="row justify-content-center">
 
@@ -21,7 +15,7 @@
 
                 <section v-else>
 
-                    <div v-if="!loading" class="card">
+                    <div class="card">
                         <div class="card-header text-uppercase font-weight-bold">{{title}}</div>
 
                         <div class="card-body">
@@ -109,6 +103,7 @@
             </div>
 
         </div>
+
     </div>
 </template>
 
@@ -124,7 +119,6 @@ export default {
     },
     mounted() {
         this.init();
-        this.success = true
     },
     data() {
         return {
@@ -143,7 +137,8 @@ export default {
     methods:{
 
         init(){
-            this.getData()
+           this.getData()
+           this.success = true
         },
         getData(){
 
@@ -165,6 +160,7 @@ export default {
                 return;
             }
 
+            this.loading = true
             axios.post(this.path, {attributes:this.item})
             .then((response) =>{
                 alert("Item Added :)")
@@ -174,6 +170,7 @@ export default {
                 this.catchErrors(error)
                 console.log(error)
             })
+            .finally(() => this.loading = false)
         },
         editForm(item){
             this.item.id = item.id;
@@ -188,6 +185,7 @@ export default {
                 }
             };
 
+            this.loading = true
             axios.put(this.path+`/${itemUp.id}`,attributes)
             .then(response=>{
                 this.modeUpdate = false;
@@ -201,11 +199,13 @@ export default {
                 this.catchErrors(error)
                 console.log(error)
             })
+            .finally(() => this.loading = false)
 
         },
         deleteItem(item,index){
             let resp = confirm(`Delete item:" ${item.name} " ?`);
             if(resp){
+                this.loading = true
                 axios.delete(this.path+`/${item.id}`)
                 .then((response)=>{
                     this.data.splice(index, 1);
@@ -214,6 +214,7 @@ export default {
                     alert("Error :(")
                     console.log(error)
                 })
+                .finally(() => this.loading = false)
             }
         },
         cancelUpdate(){

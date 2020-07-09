@@ -46,5 +46,16 @@ moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0
 ### Laravel Debugbar
 
     1. Installation:    https://github.com/barryvdh/laravel-debugbar
-    
+
+
+## Frontend Components
+
+### Loading
+
+    - Add in your component:
+
+´´´
+<section v-if="loading"><loading></loading></section>
+
+´´´
 
