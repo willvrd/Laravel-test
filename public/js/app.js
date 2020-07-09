@@ -2330,8 +2330,8 @@ __webpack_require__.r(__webpack_exports__);
       errored: false,
       errored2: false,
       errors: [],
-      data: [],
       modeUpdate: false,
+      data: [],
       item: {
         name: ''
       }
@@ -2370,27 +2370,77 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.data.push(response.data.data);
       })["catch"](function (error) {
-        if (error.response) {
-          _this2.errors = JSON.parse(error.response.data.errors);
-          _this2.errored2 = true;
-        }
+        _this2.catchErrors(error);
 
         console.log(error);
       });
     },
-    updateItem: function updateItem() {
-      console.warn("ACTUALIZO");
+    editForm: function editForm(item) {
+      this.item.id = item.id;
+      this.item.name = item.name;
+      this.modeUpdate = true;
     },
-    deleteItem: function deleteItem() {
-      console.warn("ELIMINO");
+    updateItem: function updateItem(itemUp) {
+      var _this3 = this;
+
+      var attributes = {
+        attributes: {
+          name: itemUp.name
+        }
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.path + "/".concat(itemUp.id), attributes).then(function (response) {
+        _this3.modeUpdate = false;
+
+        var index = _this3.data.findIndex(function (item) {
+          return item.id === itemUp.id;
+        });
+
+        _this3.data[index] = response.data.data;
+
+        _this3.cleanValues();
+
+        alert("Item Updated :)");
+      })["catch"](function (error) {
+        _this3.catchErrors(error);
+
+        console.log(error);
+      });
+    },
+    deleteItem: function deleteItem(item, index) {
+      var _this4 = this;
+
+      var resp = confirm("Delete item:\" ".concat(item.name, " \" ?"));
+
+      if (resp) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.path + "/".concat(item.id)).then(function (response) {
+          _this4.data.splice(index, 1);
+
+          alert(response.data.data);
+        })["catch"](function (error) {
+          alert("Error :(");
+          console.log(error);
+        });
+      }
     },
     cancelUpdate: function cancelUpdate() {
-      console.warn("CANCELO");
+      this.modeUpdate = false;
+      this.cleanValues();
+      this.cleanErrors();
     },
     cleanValues: function cleanValues() {
       this.item = {
         name: ''
       };
+    },
+    catchErrors: function catchErrors(error) {
+      if (error.response) {
+        this.errors = JSON.parse(error.response.data.errors);
+        this.errored2 = true;
+      }
+    },
+    cleanErrors: function cleanErrors() {
+      this.errors = [];
+      this.errored2 = false;
     }
   }
 });
@@ -39806,7 +39856,7 @@ var render = function() {
                                     attrs: { type: "button" },
                                     on: {
                                       click: function($event) {
-                                        return _vm.updateItem(item)
+                                        return _vm.editForm(item)
                                       }
                                     }
                                   },
@@ -39878,7 +39928,7 @@ var render = function() {
                             staticClass:
                               "card-header text-uppercase font-weight-bold"
                           },
-                          [_vm._v("Update")]
+                          [_vm._v("Update Role")]
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
@@ -39907,7 +39957,7 @@ var render = function() {
                           _c(
                             "button",
                             {
-                              staticClass: "btn btn-warning",
+                              staticClass: "btn btn-primary",
                               attrs: { type: "submit" }
                             },
                             [_vm._v("Update")]
@@ -39944,7 +39994,7 @@ var render = function() {
                             staticClass:
                               "card-header text-uppercase font-weight-bold"
                           },
-                          [_vm._v("Add")]
+                          [_vm._v("Add Role")]
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [

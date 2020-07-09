@@ -43,7 +43,7 @@
                                         <td>
                                             <button type="button"
                                                 class="btn btn-outline-primary"
-                                                @click="updateItem(item)">
+                                                @click="editForm(item)">
                                             Edit
                                             </button>
                                             <button type="button"
@@ -74,11 +74,11 @@
 
                     <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
                         <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">Update</div>
+                            <div class="card-header text-uppercase font-weight-bold">Update Role</div>
                             <div class="card-body">
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
-                                <button class="btn btn-warning" type="submit">Update</button>
+                                <button class="btn btn-primary" type="submit">Update</button>
                                 <button class="btn btn-danger" type="submit"
                                     @click="cancelUpdate">Cancel</button>
                             </div>
@@ -87,7 +87,7 @@
 
                     <form @submit.prevent="addItem" v-else>
                         <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">Add</div>
+                            <div class="card-header text-uppercase font-weight-bold">Add Role</div>
                             <div class="card-body">
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
@@ -132,8 +132,8 @@ export default {
             errored: false,
             errored2: false,
             errors: [],
-            data: [],
             modeUpdate: false,
+            data: [],
             item:{
                 name: ''
             }
@@ -170,27 +170,72 @@ export default {
                 this.cleanValues()
                 this.data.push(response.data.data);
             }).catch(error => {
-                if (error.response){
-                    this.errors = JSON.parse(error.response.data.errors);
-                    this.errored2 = true
-                }
+                this.catchErrors(error)
                 console.log(error)
             })
         },
-        updateItem(){
-            console.warn("ACTUALIZO")
+        editForm(item){
+            this.item.id = item.id;
+            this.item.name = item.name;
+            this.modeUpdate = true;
         },
-        deleteItem(){
-            console.warn("ELIMINO")
+        updateItem(itemUp){
+
+            let attributes = {
+                attributes:{
+                    name: itemUp.name
+                }
+            };
+
+            axios.put(this.path+`/${itemUp.id}`,attributes)
+            .then(response=>{
+                this.modeUpdate = false;
+                let index = this.data.findIndex(
+                    item => item.id === itemUp.id
+                );
+                this.data[index] = response.data.data;
+                this.cleanValues();
+                alert("Item Updated :)")
+            }).catch(error=>{
+                this.catchErrors(error)
+                console.log(error)
+            })
+
+        },
+        deleteItem(item,index){
+            let resp = confirm(`Delete item:" ${item.name} " ?`);
+            if(resp){
+                axios.delete(this.path+`/${item.id}`)
+                .then((response)=>{
+                    this.data.splice(index, 1);
+                    alert(response.data.data);
+                }).catch(error=>{
+                    alert("Error :(")
+                    console.log(error)
+                })
+            }
         },
         cancelUpdate(){
-            console.warn("CANCELO")
+            this.modeUpdate = false;
+            this.cleanValues()
+            this.cleanErrors()
         },
         cleanValues(){
             this.item = {
                 name: ''
             };
+        },
+        catchErrors(error){
+            if (error.response){
+                this.errors = JSON.parse(error.response.data.errors);
+                this.errored2 = true
+            }
+        },
+        cleanErrors(){
+            this.errors = []
+            this.errored2 = false;
         }
+
     }
 }
 </script>
