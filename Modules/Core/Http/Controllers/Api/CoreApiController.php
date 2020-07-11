@@ -92,5 +92,16 @@ class CoreApiController extends Controller
         }
     }
 
+    //Transform data of Paginate
+    public function pageTransformer($data)
+    {
+        return [
+            "total" => $data->total(),
+            "lastPage" => $data->lastPage(),
+            "perPage" => $data->perPage(),
+            "currentPage" => $data->currentPage()
+        ];
+    }
+
 
 }
