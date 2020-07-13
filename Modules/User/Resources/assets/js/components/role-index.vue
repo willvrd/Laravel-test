@@ -23,9 +23,11 @@
                             <table class="table">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Created At</th>
+                                        <th  v-for="(col, index) in columns" :key="index" scope="col"  @click="changeOrderBy(col.name)" class="pointer">
+                                            {{col.title}}
+                                            <span class="arrow" :class="sortOrders[col.name] > 0 ? 'asc' : 'dsc'">
+                                            </span>
+                                        </th>
                                         <th scope="col">Actions</th>
                                     </tr>
                                 </thead>
@@ -118,7 +120,9 @@ export default {
         path: String
     },
     mounted() {
-        this.init();
+        this.$nextTick(function () {
+            this.init();
+        })
     },
     data() {
         return {
@@ -131,18 +135,40 @@ export default {
             data: [],
             item:{
                 name: ''
-            }
+            },
+            params:{
+                filter:{
+                    order:{
+                        field:"id",
+                        way:"asc"
+                    }
+                }
+            },
+            columns: [
+                {title:"Id",name: "id"},
+                {title:"Name",name: "name"},
+                {title:"Created At",name: "created_at"}
+            ],
+            sortOrders: {}
         }
     },
     methods:{
 
         init(){
-           this.getData()
+            this.getData()
+
+            var sortOrders = {}
+            this.columns.forEach(function (key) {
+                sortOrders[key.name] = 1
+            })
+            this.sortOrders = sortOrders
+
            this.success = true
         },
         getData(){
 
-            axios.get(this.path)
+            this.loading = true
+            axios.get(this.path, {params:this.params})
             .then(response => {
                 this.data = response.data.data;
             })
@@ -236,8 +262,50 @@ export default {
         cleanErrors(){
             this.errors = []
             this.errored2 = false;
+        },
+        changeOrderBy(field){
+
+            this.params.filter.order.field = field
+
+            if(this.params.filter.order.way=="asc")
+                this.params.filter.order.way="desc"
+            else
+                this.params.filter.order.way="asc"
+
+            this.sortOrders[field] = this.sortOrders[field] * -1
+
+            this.getData()
         }
 
     }
 }
 </script>
+
+<style scoped>
+
+    .pointer{
+       cursor: pointer;
+    }
+
+    .arrow {
+        display: inline-block;
+        vertical-align: middle;
+        width: 0;
+        height: 0;
+        margin-left: 5px;
+        opacity: 0.66;
+    }
+
+    .arrow.asc {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 4px solid #fff;
+    }
+
+    .arrow.dsc {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #fff;
+    }
+
+</style>
