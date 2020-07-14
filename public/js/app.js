@@ -2440,6 +2440,86 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2466,6 +2546,7 @@ __webpack_require__.r(__webpack_exports__);
         name: ''
       },
       params: {
+        page: 1,
         filter: {
           order: {
             field: "id",
@@ -2483,28 +2564,30 @@ __webpack_require__.r(__webpack_exports__);
         title: "Created At",
         name: "created_at"
       }],
-      sortOrders: {}
+      sortOrders: {},
+      pagination: {},
+      selectedPage: 1,
+      recordsPerPage: [12, 25, 50, 100],
+      selectedRecords: 12
     };
   },
   methods: {
     init: function init() {
       this.getData();
-      var sortOrders = {};
-      this.columns.forEach(function (key) {
-        sortOrders[key.name] = 1;
-      });
-      this.sortOrders = sortOrders;
-      console.warn(this.sortOrders);
+      this.setSortOrders();
       this.success = true;
     },
     getData: function getData() {
       var _this = this;
 
       this.loading = true;
+      this.params.take = this.selectedRecords;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.path, {
         params: this.params
       }).then(function (response) {
         _this.data = response.data.data;
+        _this.pagination = response.data.meta.page;
+        _this.selectedPage = _this.pagination.currentPage;
       })["catch"](function (error) {
         console.log(error);
         _this.errored = true;
@@ -2610,10 +2693,37 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = [];
       this.errored2 = false;
     },
+    setSortOrders: function setSortOrders() {
+      var sortOrders = {};
+      this.columns.forEach(function (key) {
+        sortOrders[key.name] = 1;
+      });
+      this.sortOrders = sortOrders;
+    },
     changeOrderBy: function changeOrderBy(field) {
       this.params.filter.order.field = field;
       if (this.params.filter.order.way == "asc") this.params.filter.order.way = "desc";else this.params.filter.order.way = "asc";
       this.sortOrders[field] = this.sortOrders[field] * -1;
+      this.getData();
+    },
+    changePage: function changePage(type) {
+      if (type == "first") {
+        this.params.page = 1;
+      } else if (type == "last") {
+        this.params.page = this.pagination.lastPage;
+      } else if (type == "next") {
+        this.params.page = this.pagination.currentPage + 1;
+      } else if (type == "back") {
+        if (this.pagination.currentPage > 1) this.params.page = this.pagination.currentPage - 1;else return false;
+      } else if (type == "page") {
+        this.params.page = this.selectedPage;
+      }
+
+      this.getData();
+    },
+    changeRecordsPerPage: function changeRecordsPerPage() {
+      this.params.take = this.selectedRecords;
+      this.params.page = 1;
       this.getData();
     }
   }
@@ -8097,7 +8207,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../../../node_module
 
 
 // module
-exports.push([module.i, "\n.pointer[data-v-3e778cbc]{\n   cursor: pointer;\n}\n.arrow[data-v-3e778cbc] {\n    display: inline-block;\n    vertical-align: middle;\n    width: 0;\n    height: 0;\n    margin-left: 5px;\n    opacity: 0.66;\n}\n.arrow.asc[data-v-3e778cbc] {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-bottom: 4px solid #fff;\n}\n.arrow.dsc[data-v-3e778cbc] {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid #fff;\n}\n\n", ""]);
+exports.push([module.i, "\n.pointer[data-v-3e778cbc]{\n   cursor: pointer;\n}\nth[data-v-3e778cbc] {\n    color: rgba(255,255,255,0.5) !important;\n}\nth.active[data-v-3e778cbc] {\n    color: #fff !important;\n}\nth.active .arrow[data-v-3e778cbc] {\n    opacity: 1;\n}\n.arrow[data-v-3e778cbc] {\n    display: inline-block;\n    vertical-align: middle;\n    width: 0;\n    height: 0;\n    margin-left: 5px;\n    opacity: 0.5;\n}\n.arrow.asc[data-v-3e778cbc] {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-bottom: 4px solid #fff;\n}\n.arrow.dsc[data-v-3e778cbc] {\n    border-left: 4px solid transparent;\n    border-right: 4px solid transparent;\n    border-top: 4px solid #fff;\n}\n.pagination .page-link[data-v-3e778cbc]{\n    font-size: 1rem;\n}\n\n", ""]);
 
 // exports
 
@@ -40133,7 +40243,7 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                   Sorry, no results available.\n                "
+                        "\n                   Sorry, Error :(\n                "
                       )
                     ]
                   )
@@ -40150,113 +40260,484 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("div", { staticClass: "card-body" }, [
-                      _c("table", { staticClass: "table" }, [
-                        _c("thead", { staticClass: "thead-dark" }, [
-                          _c(
-                            "tr",
-                            [
-                              _vm._l(_vm.columns, function(col, index) {
-                                return _c(
-                                  "th",
-                                  {
-                                    key: index,
-                                    staticClass: "pointer",
-                                    attrs: { scope: "col" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.changeOrderBy(col.name)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        " +
-                                        _vm._s(col.title) +
-                                        "\n                                        "
+                      _vm.data.length > 0
+                        ? _c("table", { staticClass: "table" }, [
+                            _c("thead", { staticClass: "thead-dark" }, [
+                              _c(
+                                "tr",
+                                [
+                                  _vm._l(_vm.columns, function(col, index) {
+                                    return _c(
+                                      "th",
+                                      {
+                                        key: index,
+                                        staticClass: "pointer",
+                                        class: {
+                                          active:
+                                            _vm.params.filter.order.field ==
+                                            col.name
+                                        },
+                                        attrs: { scope: "col" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.changeOrderBy(col.name)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(col.title) +
+                                            "\n                                        "
+                                        ),
+                                        _c("span", {
+                                          staticClass: "arrow",
+                                          class:
+                                            _vm.sortOrders[col.name] > 0
+                                              ? "asc"
+                                              : "dsc"
+                                        })
+                                      ]
+                                    )
+                                  }),
+                                  _vm._v(" "),
+                                  _c("th", { attrs: { scope: "col" } }, [
+                                    _vm._v("Actions")
+                                  ])
+                                ],
+                                2
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "tbody",
+                              _vm._l(_vm.data, function(item, index) {
+                                return _c("tr", { key: index }, [
+                                  _c("td", [_vm._v(_vm._s(item.id))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(item.name))]),
+                                  _vm._v(" "),
+                                  _c("td", [_vm._v(_vm._s(item.createdAt))]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-primary",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editForm(item)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Edit\n                                        "
+                                        )
+                                      ]
                                     ),
-                                    _c("span", {
-                                      staticClass: "arrow",
-                                      class:
-                                        _vm.sortOrders[col.name] > 0
-                                          ? "asc"
-                                          : "dsc"
-                                    })
-                                  ]
-                                )
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-danger",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteItem(item, index)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        Delete\n                                        "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ])
                               }),
-                              _vm._v(" "),
-                              _c("th", { attrs: { scope: "col" } }, [
-                                _vm._v("Actions")
-                              ])
-                            ],
-                            2
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "tbody",
-                          _vm._l(_vm.data, function(item, index) {
-                            return _c("tr", { key: index }, [
-                              _c("th", { attrs: { scope: "row" } }, [
-                                _vm._v(_vm._s(item.id))
-                              ]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(item.name))]),
-                              _vm._v(" "),
-                              _c("td", [_vm._v(_vm._s(item.createdAt))]),
-                              _vm._v(" "),
-                              _c("td", [
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-outline-primary",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.editForm(item)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Edit\n                                        "
-                                    )
-                                  ]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "button",
-                                  {
-                                    staticClass: "btn btn-outline-danger",
-                                    attrs: { type: "button" },
-                                    on: {
-                                      click: function($event) {
-                                        return _vm.deleteItem(item, index)
-                                      }
-                                    }
-                                  },
-                                  [
-                                    _vm._v(
-                                      "\n                                        Delete\n                                        "
-                                    )
-                                  ]
+                              0
+                            )
+                          ])
+                        : _c("div", [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "alert alert-danger my-3",
+                                attrs: { role: "alert" }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Sorry, no results available.\n                            "
                                 )
-                              ])
-                            ])
-                          }),
-                          0
-                        )
-                      ])
+                              ]
+                            )
+                          ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "card-footer" }, [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(_vm.initMsj) +
-                          " : " +
-                          _vm._s(_vm.moduleName) +
-                          "\n                    "
-                      )
+                      _vm.pagination.total > 1
+                        ? _c("div", { staticClass: "row" }, [
+                            _c("div", { staticClass: "col-12 col-sm-4" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "records-pages form-group row d-flex justify-content-center"
+                                },
+                                [
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "mx-2",
+                                      attrs: { for: "selectRecordsPages" }
+                                    },
+                                    [_vm._v("Records per Page:")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "select",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.selectedRecords,
+                                          expression: "selectedRecords"
+                                        }
+                                      ],
+                                      attrs: { name: "selectRecordsPages" },
+                                      on: {
+                                        change: [
+                                          function($event) {
+                                            var $$selectedVal = Array.prototype.filter
+                                              .call(
+                                                $event.target.options,
+                                                function(o) {
+                                                  return o.selected
+                                                }
+                                              )
+                                              .map(function(o) {
+                                                var val =
+                                                  "_value" in o
+                                                    ? o._value
+                                                    : o.value
+                                                return val
+                                              })
+                                            _vm.selectedRecords = $event.target
+                                              .multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          },
+                                          function($event) {
+                                            return _vm.changeRecordsPerPage()
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    _vm._l(_vm.recordsPerPage, function(
+                                      num,
+                                      index
+                                    ) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: index,
+                                          domProps: { value: num }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                            " +
+                                              _vm._s(num) +
+                                              "\n                                        "
+                                          )
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-12 col-sm-4" }, [
+                              _c(
+                                "nav",
+                                {
+                                  attrs: {
+                                    "aria-label": "Page navigation example"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "ul",
+                                    {
+                                      staticClass:
+                                        "pagination d-flex justify-content-center"
+                                    },
+                                    [
+                                      _vm.pagination.currentPage != 1
+                                        ? _c(
+                                            "li",
+                                            {
+                                              staticClass: "page-item pointer"
+                                            },
+                                            [
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass: "page-link",
+                                                  attrs: {
+                                                    title: "First Page"
+                                                  },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changePage(
+                                                        "first"
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    },
+                                                    [_vm._v("«")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "sr-only" },
+                                                    [_vm._v("First")]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.pagination.currentPage != 1
+                                        ? _c(
+                                            "li",
+                                            {
+                                              staticClass: "page-item pointer"
+                                            },
+                                            [
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass: "page-link",
+                                                  attrs: { title: "Previous" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changePage(
+                                                        "back"
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    },
+                                                    [_vm._v("Previous")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "sr-only" },
+                                                    [_vm._v("Previous")]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.pagination.currentPage <
+                                      _vm.pagination.lastPage
+                                        ? _c(
+                                            "li",
+                                            {
+                                              staticClass: "page-item pointer"
+                                            },
+                                            [
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass: "page-link",
+                                                  attrs: { title: "Next" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changePage(
+                                                        "next"
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    },
+                                                    [_vm._v("Next")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "sr-only" },
+                                                    [_vm._v("Next")]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e(),
+                                      _vm._v(" "),
+                                      _vm.pagination.currentPage !=
+                                      _vm.pagination.lastPage
+                                        ? _c(
+                                            "li",
+                                            {
+                                              staticClass: "page-item pointer"
+                                            },
+                                            [
+                                              _c(
+                                                "a",
+                                                {
+                                                  staticClass: "page-link",
+                                                  attrs: { title: "Last Page" },
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.changePage(
+                                                        "last"
+                                                      )
+                                                    }
+                                                  }
+                                                },
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      attrs: {
+                                                        "aria-hidden": "true"
+                                                      }
+                                                    },
+                                                    [_vm._v("»")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "span",
+                                                    { staticClass: "sr-only" },
+                                                    [_vm._v("Last")]
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "col-12 col-sm-4" }, [
+                              _c(
+                                "div",
+                                {
+                                  staticClass:
+                                    "pagination-pages form-group row d-flex justify-content-center"
+                                },
+                                [
+                                  _c(
+                                    "label",
+                                    {
+                                      staticClass: "mx-2",
+                                      attrs: { for: "selectCurrentPage" }
+                                    },
+                                    [_vm._v("Current Page:")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "select",
+                                    {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.selectedPage,
+                                          expression: "selectedPage"
+                                        }
+                                      ],
+                                      attrs: { name: "selectCurrentPage" },
+                                      on: {
+                                        change: [
+                                          function($event) {
+                                            var $$selectedVal = Array.prototype.filter
+                                              .call(
+                                                $event.target.options,
+                                                function(o) {
+                                                  return o.selected
+                                                }
+                                              )
+                                              .map(function(o) {
+                                                var val =
+                                                  "_value" in o
+                                                    ? o._value
+                                                    : o.value
+                                                return val
+                                              })
+                                            _vm.selectedPage = $event.target
+                                              .multiple
+                                              ? $$selectedVal
+                                              : $$selectedVal[0]
+                                          },
+                                          function($event) {
+                                            return _vm.changePage("page")
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    _vm._l(_vm.pagination.lastPage, function(
+                                      num,
+                                      index
+                                    ) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: index,
+                                          domProps: { value: num }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                        " +
+                                              _vm._s(num) +
+                                              "\n                                    "
+                                          )
+                                        ]
+                                      )
+                                    }),
+                                    0
+                                  )
+                                ]
+                              )
+                            ])
+                          ])
+                        : _vm._e()
                     ])
                   ])
                 ])
@@ -40287,6 +40768,10 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
+                          _c("label", { attrs: { for: "inputName" } }, [
+                            _vm._v("Name")
+                          ]),
+                          _vm._v(" "),
                           _c("input", {
                             directives: [
                               {
@@ -40353,6 +40838,10 @@ var render = function() {
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
+                          _c("label", { attrs: { for: "inputName" } }, [
+                            _vm._v("Name")
+                          ]),
+                          _vm._v(" "),
                           _c("input", {
                             directives: [
                               {

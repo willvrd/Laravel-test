@@ -9,7 +9,7 @@
 
                 <section v-if="errored" >
                     <div class="alert alert-danger my-5" role="alert">
-                       Sorry, no results available.
+                       Sorry, Error :(
                     </div>
                 </section>
 
@@ -20,10 +20,14 @@
 
                         <div class="card-body">
 
-                            <table class="table">
+                            <table v-if="data.length>0" class="table">
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th  v-for="(col, index) in columns" :key="index" scope="col"  @click="changeOrderBy(col.name)" class="pointer">
+                                        <th  v-for="(col, index) in columns" :key="index"
+                                        scope="col"
+                                        @click="changeOrderBy(col.name)"
+                                        class="pointer"
+                                        :class="{ active: params.filter.order.field == col.name }">
                                             {{col.title}}
                                             <span class="arrow" :class="sortOrders[col.name] > 0 ? 'asc' : 'dsc'">
                                             </span>
@@ -33,7 +37,7 @@
                                 </thead>
                                 <tbody>
                                     <tr  v-for="(item, index) in data" :key="index">
-                                        <th scope="row">{{item.id}}</th>
+                                        <td>{{item.id}}</td>
                                         <td>{{item.name}}</td>
                                         <td>{{item.createdAt}}</td>
                                         <td>
@@ -52,10 +56,84 @@
                                 </tbody>
                             </table>
 
+                            <div v-else>
+                                <div class="alert alert-danger my-3" role="alert">
+                                    Sorry, no results available.
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="card-footer">
-                            {{initMsj}} : {{moduleName}}
+                            <div v-if="pagination.total > 1" class="row">
+
+                                <div class="col-12 col-sm-4">
+                                    <div class="records-pages form-group row d-flex justify-content-center">
+                                        <label for="selectRecordsPages" class="mx-2">Records per Page:</label>
+                                        <select name="selectRecordsPages" v-model="selectedRecords" @change="changeRecordsPerPage()">
+                                            <option  v-for="(num,index) in recordsPerPage" :key="index"
+                                                :value="num"
+                                                >
+                                                {{num}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-sm-4">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination d-flex justify-content-center">
+
+                                            <!-- First -->
+                                            <li class="page-item pointer" v-if="pagination.currentPage!=1">
+                                                <a class="page-link" @click="changePage('first')" title="First Page">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                    <span class="sr-only">First</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Back -->
+                                            <li class="page-item pointer" v-if="pagination.currentPage != 1">
+                                                <a class="page-link" @click="changePage('back')" title="Previous">
+                                                    <span aria-hidden="true">Previous</span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Next -->
+                                            <li class="page-item pointer" v-if="pagination.currentPage < pagination.lastPage">
+                                                <a class="page-link" v-on:click="changePage('next')" title="Next">
+                                                    <span aria-hidden="true">Next</span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Last -->
+                                            <li class="page-item pointer" v-if="pagination.currentPage!=pagination.lastPage">
+                                                <a class="page-link" v-on:click="changePage('last')" title="Last Page">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                    <span class="sr-only">Last</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+
+                                <div class="col-12 col-sm-4">
+                                    <div class="pagination-pages form-group row d-flex justify-content-center">
+                                    <label for="selectCurrentPage" class="mx-2">Current Page:</label>
+                                    <select name="selectCurrentPage" v-model="selectedPage" @change="changePage('page')">
+                                        <option  v-for="(num,index) in pagination.lastPage" :key="index"
+                                            :value="num"
+                                            >
+                                            {{num}}
+                                        </option>
+                                    </select>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
@@ -72,6 +150,7 @@
                         <div class="card">
                             <div class="card-header text-uppercase font-weight-bold">Update Role</div>
                             <div class="card-body">
+                                <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
                                 <button class="btn btn-primary" type="submit">Update</button>
@@ -85,6 +164,7 @@
                         <div class="card">
                             <div class="card-header text-uppercase font-weight-bold">Add Role</div>
                             <div class="card-body">
+                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
                                 <button class="btn btn-primary" type="submit">Add</button>
@@ -137,6 +217,7 @@ export default {
                 name: ''
             },
             params:{
+                page: 1,
                 filter:{
                     order:{
                         field:"id",
@@ -149,28 +230,31 @@ export default {
                 {title:"Name",name: "name"},
                 {title:"Created At",name: "created_at"}
             ],
-            sortOrders: {}
+            sortOrders: {},
+            pagination:{},
+            selectedPage: 1,
+            recordsPerPage:[12,25,50,100],
+            selectedRecords: 12
         }
     },
     methods:{
 
         init(){
             this.getData()
+            this.setSortOrders()
 
-            var sortOrders = {}
-            this.columns.forEach(function (key) {
-                sortOrders[key.name] = 1
-            })
-            this.sortOrders = sortOrders
-
-           this.success = true
+            this.success = true
         },
         getData(){
 
             this.loading = true
+            this.params.take = this.selectedRecords
+
             axios.get(this.path, {params:this.params})
             .then(response => {
                 this.data = response.data.data;
+                this.pagination = response.data.meta.page
+                this.selectedPage = this.pagination.currentPage
             })
             .catch(error => {
                 console.log(error)
@@ -263,6 +347,13 @@ export default {
             this.errors = []
             this.errored2 = false;
         },
+        setSortOrders(){
+            var sortOrders = {}
+            this.columns.forEach(function (key) {
+                sortOrders[key.name] = 1
+            })
+            this.sortOrders = sortOrders
+        },
         changeOrderBy(field){
 
             this.params.filter.order.field = field
@@ -275,7 +366,34 @@ export default {
             this.sortOrders[field] = this.sortOrders[field] * -1
 
             this.getData()
+        },
+        changePage(type){
+
+            if(type=="first"){
+                this.params.page = 1;
+            }else if(type=="last"){
+                this.params.page = this.pagination.lastPage;
+            }else if(type=="next"){
+                this.params.page = this.pagination.currentPage+1;
+            }else if(type=="back"){
+                  if(this.pagination.currentPage>1)
+                    this.params.page = this.pagination.currentPage-1;
+                  else
+                    return false;
+            }else if(type=="page"){
+                this.params.page = this.selectedPage;
+            }
+
+            this.getData();
+        },
+        changeRecordsPerPage(){
+
+            this.params.take = this.selectedRecords
+            this.params.page = 1
+            this.getData();
+
         }
+
 
     }
 }
@@ -287,13 +405,25 @@ export default {
        cursor: pointer;
     }
 
+    th {
+        color: rgba(255,255,255,0.5) !important;
+    }
+
+    th.active {
+        color: #fff !important;
+    }
+
+    th.active .arrow {
+        opacity: 1;
+    }
+
     .arrow {
         display: inline-block;
         vertical-align: middle;
         width: 0;
         height: 0;
         margin-left: 5px;
-        opacity: 0.66;
+        opacity: 0.5;
     }
 
     .arrow.asc {
@@ -306,6 +436,10 @@ export default {
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
         border-top: 4px solid #fff;
+    }
+
+    .pagination .page-link{
+        font-size: 1rem;
     }
 
 </style>
