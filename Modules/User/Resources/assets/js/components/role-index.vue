@@ -7,13 +7,7 @@
 
             <div class="col-md-9">
 
-                <section v-if="errored" >
-                    <div class="alert alert-danger my-5" role="alert">
-                       Sorry, Error :(
-                    </div>
-                </section>
-
-                <section v-else>
+                <section>
 
                     <div class="card">
                         <div class="card-header text-uppercase font-weight-bold">{{title}}</div>
@@ -56,15 +50,14 @@
                                 </tbody>
                             </table>
 
-                            <div v-else>
-                                <div class="alert alert-danger my-3" role="alert">
-                                    Sorry, no results available.
-                                </div>
-                            </div>
+                            <!-- Errors Table -->
+                            <alert :alert="alertTable"></alert>
 
                         </div>
 
                         <div class="card-footer">
+
+                            <!-- Pagination -->
                             <div v-if="pagination.total > 1" class="row">
 
                                 <div class="col-12 col-sm-4">
@@ -134,6 +127,7 @@
                                 </div>
 
                             </div>
+
                         </div>
 
                     </div>
@@ -172,11 +166,10 @@
                         </div>
                     </form>
 
-                    <section v-if="errored2">
-                        <div class="alert alert-danger mt-1" role="alert">
-                            <p v-for="(error, index) in errors" :key="index">
-                                {{error}}
-                            </p>
+                    <!-- Errors Form -->
+                    <section v-if="Object.keys(errors).length>0" class="errorsForm">
+                        <div v-for="(error, index) in errors" :key="index">
+                            <alert :alert="{status:true,type:'alert-danger',text: error}"></alert>
                         </div>
                     </section>
 
@@ -195,8 +188,6 @@ import axios from 'axios';
 export default {
     props: {
         title: String,
-        moduleName: String,
-        initMsj: String,
         path: String
     },
     mounted() {
@@ -208,11 +199,14 @@ export default {
         return {
             success: false,
             loading: true,
-            errored: false,
-            errored2: false,
             errors: [],
             modeUpdate: false,
             data: [],
+            alertTable:{
+                status: false,
+                type: 'alert-danger',
+                text: 'Error - Sorry :('
+            },
             item:{
                 name: ''
             },
@@ -258,7 +252,7 @@ export default {
             })
             .catch(error => {
                 console.log(error)
-                this.errored = true
+                this.alertTable.status = true
             })
             .finally(() => this.loading = false)
 
@@ -330,22 +324,17 @@ export default {
         cancelUpdate(){
             this.modeUpdate = false;
             this.cleanValues()
-            this.cleanErrors()
         },
         cleanValues(){
             this.item = {
                 name: ''
             };
+            this.errors = []
         },
         catchErrors(error){
             if (error.response){
                 this.errors = JSON.parse(error.response.data.errors);
-                this.errored2 = true
             }
-        },
-        cleanErrors(){
-            this.errors = []
-            this.errored2 = false;
         },
         setSortOrders(){
             var sortOrders = {}

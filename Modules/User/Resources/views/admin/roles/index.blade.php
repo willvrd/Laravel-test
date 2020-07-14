@@ -6,8 +6,6 @@
 
     <role-index
         title="{{ __("user::roles.title.roles") }}"
-        module-name="{!! config('user.name') !!}"
-        init-msj="{{ __("core::common.messages.welcome") }}"
         path="{{route(app()->getLocale().'.api.user.roles.index')}}">
     </role-index>
 
