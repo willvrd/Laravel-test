@@ -146,7 +146,7 @@
                             <div class="card-body">
                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name">
+                                    placeholder="Name" v-model="item.name" required>
                                 <button class="btn btn-primary" type="submit">Update</button>
                                 <button class="btn btn-danger" type="submit"
                                     @click="cancelUpdate">Cancel</button>
@@ -158,9 +158,9 @@
                         <div class="card">
                             <div class="card-header text-uppercase font-weight-bold">Add Role</div>
                             <div class="card-body">
-                                 <label for="inputName">Name</label>
+                                <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name">
+                                    placeholder="Name" v-model="item.name" required>
                                 <button class="btn btn-primary" type="submit">Add</button>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                     <!-- Errors Form -->
                     <section v-if="Object.keys(errors).length>0" class="errorsForm">
                         <div v-for="(error, index) in errors" :key="index">
-                            <alert :alert="{status:true,type:'alert-danger',text: error}"></alert>
+                            <alert :alert="{status:true,type:'alert-danger',text: error.name}"></alert>
                         </div>
                     </section>
 
@@ -259,22 +259,19 @@ export default {
         },
         addItem(){
 
-            if(this.item.name.trim() === ''){
-                alert('Debes completar todos los campos antes de guardar');
-                return;
+            if(this.validateForm()){
+                this.loading = true
+                axios.post(this.path, {attributes:this.item})
+                .then((response) =>{
+                    alert("Item Added :)")
+                    this.cleanValues()
+                    this.data.push(response.data.data);
+                }).catch(error => {
+                    this.catchErrors(error)
+                    console.log(error)
+                })
+                .finally(() => this.loading = false)
             }
-
-            this.loading = true
-            axios.post(this.path, {attributes:this.item})
-            .then((response) =>{
-                alert("Item Added :)")
-                this.cleanValues()
-                this.data.push(response.data.data);
-            }).catch(error => {
-                this.catchErrors(error)
-                console.log(error)
-            })
-            .finally(() => this.loading = false)
         },
         editForm(item){
             this.item.id = item.id;
@@ -283,27 +280,29 @@ export default {
         },
         updateItem(itemUp){
 
-            let attributes = {
-                attributes:{
-                    name: itemUp.name
-                }
-            };
+            if(this.validateForm()){
+                let attributes = {
+                    attributes:{
+                        name: itemUp.name
+                    }
+                };
 
-            this.loading = true
-            axios.put(this.path+`/${itemUp.id}`,attributes)
-            .then(response=>{
-                this.modeUpdate = false;
-                let index = this.data.findIndex(
-                    item => item.id === itemUp.id
-                );
-                this.data[index] = response.data.data;
-                this.cleanValues();
-                alert("Item Updated :)")
-            }).catch(error=>{
-                this.catchErrors(error)
-                console.log(error)
-            })
-            .finally(() => this.loading = false)
+                this.loading = true
+                axios.put(this.path+`/${itemUp.id}`,attributes)
+                .then(response=>{
+                    this.modeUpdate = false;
+                    let index = this.data.findIndex(
+                        item => item.id === itemUp.id
+                    );
+                    this.data[index] = response.data.data;
+                    this.cleanValues();
+                    alert("Item Updated :)")
+                }).catch(error=>{
+                    this.catchErrors(error)
+                    console.log(error)
+                })
+                .finally(() => this.loading = false)
+            }
 
         },
         deleteItem(item,index){
@@ -335,6 +334,22 @@ export default {
             if (error.response){
                 this.errors = JSON.parse(error.response.data.errors);
             }
+        },
+        validateForm() {
+
+            this.errors = []
+
+            if (this.item.name)
+                return true;
+
+            if (!this.item.name){
+                this.errors.push({
+                    "name":"Name is required"
+                });
+            }
+
+            return false
+
         },
         setSortOrders(){
             var sortOrders = {}

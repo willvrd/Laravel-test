@@ -56,6 +56,13 @@ moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0
 
 ´´´
 <section v-if="loading"><loading></loading></section>
+´´´
 
+### Alert
+
+    - Add in your component:
+
+´´´
+ <alert :alert="{status:true,type:'alert-danger',text:'Error Sorry '}"></alert>
 ´´´
 

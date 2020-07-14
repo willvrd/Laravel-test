@@ -2694,27 +2694,24 @@ __webpack_require__.r(__webpack_exports__);
     addItem: function addItem() {
       var _this2 = this;
 
-      if (this.item.name.trim() === '') {
-        alert('Debes completar todos los campos antes de guardar');
-        return;
+      if (this.validateForm()) {
+        this.loading = true;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.path, {
+          attributes: this.item
+        }).then(function (response) {
+          alert("Item Added :)");
+
+          _this2.cleanValues();
+
+          _this2.data.push(response.data.data);
+        })["catch"](function (error) {
+          _this2.catchErrors(error);
+
+          console.log(error);
+        })["finally"](function () {
+          return _this2.loading = false;
+        });
       }
-
-      this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.path, {
-        attributes: this.item
-      }).then(function (response) {
-        alert("Item Added :)");
-
-        _this2.cleanValues();
-
-        _this2.data.push(response.data.data);
-      })["catch"](function (error) {
-        _this2.catchErrors(error);
-
-        console.log(error);
-      })["finally"](function () {
-        return _this2.loading = false;
-      });
     },
     editForm: function editForm(item) {
       this.item.id = item.id;
@@ -2724,31 +2721,33 @@ __webpack_require__.r(__webpack_exports__);
     updateItem: function updateItem(itemUp) {
       var _this3 = this;
 
-      var attributes = {
-        attributes: {
-          name: itemUp.name
-        }
-      };
-      this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.path + "/".concat(itemUp.id), attributes).then(function (response) {
-        _this3.modeUpdate = false;
+      if (this.validateForm()) {
+        var attributes = {
+          attributes: {
+            name: itemUp.name
+          }
+        };
+        this.loading = true;
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.path + "/".concat(itemUp.id), attributes).then(function (response) {
+          _this3.modeUpdate = false;
 
-        var index = _this3.data.findIndex(function (item) {
-          return item.id === itemUp.id;
+          var index = _this3.data.findIndex(function (item) {
+            return item.id === itemUp.id;
+          });
+
+          _this3.data[index] = response.data.data;
+
+          _this3.cleanValues();
+
+          alert("Item Updated :)");
+        })["catch"](function (error) {
+          _this3.catchErrors(error);
+
+          console.log(error);
+        })["finally"](function () {
+          return _this3.loading = false;
         });
-
-        _this3.data[index] = response.data.data;
-
-        _this3.cleanValues();
-
-        alert("Item Updated :)");
-      })["catch"](function (error) {
-        _this3.catchErrors(error);
-
-        console.log(error);
-      })["finally"](function () {
-        return _this3.loading = false;
-      });
+      }
     },
     deleteItem: function deleteItem(item, index) {
       var _this4 = this;
@@ -2783,6 +2782,18 @@ __webpack_require__.r(__webpack_exports__);
       if (error.response) {
         this.errors = JSON.parse(error.response.data.errors);
       }
+    },
+    validateForm: function validateForm() {
+      this.errors = [];
+      if (this.item.name) return true;
+
+      if (!this.item.name) {
+        this.errors.push({
+          "name": "Name is required"
+        });
+      }
+
+      return false;
     },
     setSortOrders: function setSortOrders() {
       var sortOrders = {};
@@ -40857,7 +40868,11 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control mb-2",
-                            attrs: { type: "text", placeholder: "Name" },
+                            attrs: {
+                              type: "text",
+                              placeholder: "Name",
+                              required: ""
+                            },
                             domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
@@ -40927,7 +40942,11 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control mb-2",
-                            attrs: { type: "text", placeholder: "Name" },
+                            attrs: {
+                              type: "text",
+                              placeholder: "Name",
+                              required: ""
+                            },
                             domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
@@ -40966,7 +40985,7 @@ var render = function() {
                               alert: {
                                 status: true,
                                 type: "alert-danger",
-                                text: error
+                                text: error.name
                               }
                             }
                           })
