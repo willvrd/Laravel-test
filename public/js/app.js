@@ -2384,6 +2384,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     alert: {
@@ -2694,6 +2699,8 @@ __webpack_require__.r(__webpack_exports__);
     addItem: function addItem() {
       var _this2 = this;
 
+      this.errors = [];
+
       if (this.validateForm()) {
         this.loading = true;
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.path, {
@@ -2720,6 +2727,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateItem: function updateItem(itemUp) {
       var _this3 = this;
+
+      this.errors = [];
 
       if (this.validateForm()) {
         var attributes = {
@@ -2771,12 +2780,12 @@ __webpack_require__.r(__webpack_exports__);
     cancelUpdate: function cancelUpdate() {
       this.modeUpdate = false;
       this.cleanValues();
+      this.errors = [];
     },
     cleanValues: function cleanValues() {
       this.item = {
         name: ''
       };
-      this.errors = [];
     },
     catchErrors: function catchErrors(error) {
       if (error.response) {
@@ -40287,10 +40296,17 @@ var render = function() {
             "div",
             {
               staticClass: "alert my-3",
-              class: _vm.alert.type,
+              class: [
+                _vm.alert.type,
+                _vm.alert.dismissible ? "alert-dismissible fade show" : ""
+              ],
               attrs: { role: "alert" }
             },
-            [_vm._v("\n            " + _vm._s(_vm.alert.text) + "\n        ")]
+            [
+              _vm._v(
+                "\n            " + _vm._s(_vm.alert.text) + "\n            "
+              )
+            ]
           )
         ])
       : _vm._e()
@@ -40868,11 +40884,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control mb-2",
-                            attrs: {
-                              type: "text",
-                              placeholder: "Name",
-                              required: ""
-                            },
+                            attrs: { type: "text", placeholder: "Name" },
                             domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
@@ -40942,11 +40954,7 @@ var render = function() {
                               }
                             ],
                             staticClass: "form-control mb-2",
-                            attrs: {
-                              type: "text",
-                              placeholder: "Name",
-                              required: ""
-                            },
+                            attrs: { type: "text", placeholder: "Name" },
                             domProps: { value: _vm.item.name },
                             on: {
                               input: function($event) {
@@ -40985,7 +40993,9 @@ var render = function() {
                               alert: {
                                 status: true,
                                 type: "alert-danger",
-                                text: error.name
+                                text: error.name,
+                                dismissible: true,
+                                rand: index
                               }
                             }
                           })

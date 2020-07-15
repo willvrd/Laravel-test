@@ -146,7 +146,7 @@
                             <div class="card-body">
                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name" required>
+                                    placeholder="Name" v-model="item.name">
                                 <button class="btn btn-primary" type="submit">Update</button>
                                 <button class="btn btn-danger" type="submit"
                                     @click="cancelUpdate">Cancel</button>
@@ -160,7 +160,7 @@
                             <div class="card-body">
                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name" required>
+                                    placeholder="Name" v-model="item.name">
                                 <button class="btn btn-primary" type="submit">Add</button>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                     <!-- Errors Form -->
                     <section v-if="Object.keys(errors).length>0" class="errorsForm">
                         <div v-for="(error, index) in errors" :key="index">
-                            <alert :alert="{status:true,type:'alert-danger',text: error.name}"></alert>
+                            <alert :alert="{status:true,type:'alert-danger',text: error.name,dismissible:true}"></alert>
                         </div>
                     </section>
 
@@ -259,6 +259,8 @@ export default {
         },
         addItem(){
 
+            this.errors = []
+
             if(this.validateForm()){
                 this.loading = true
                 axios.post(this.path, {attributes:this.item})
@@ -272,6 +274,7 @@ export default {
                 })
                 .finally(() => this.loading = false)
             }
+
         },
         editForm(item){
             this.item.id = item.id;
@@ -279,6 +282,8 @@ export default {
             this.modeUpdate = true;
         },
         updateItem(itemUp){
+
+            this.errors = []
 
             if(this.validateForm()){
                 let attributes = {
@@ -323,12 +328,13 @@ export default {
         cancelUpdate(){
             this.modeUpdate = false;
             this.cleanValues()
+            this.errors = []
+
         },
         cleanValues(){
             this.item = {
                 name: ''
             };
-            this.errors = []
         },
         catchErrors(error){
             if (error.response){

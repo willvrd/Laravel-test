@@ -63,6 +63,6 @@ moduleVueFiles.keys().map(key => Vue.component(key.split('/').pop().split('.')[0
     - Add in your component:
 
 ´´´
- <alert :alert="{status:true,type:'alert-danger',text:'Error Sorry '}"></alert>
+<alert :alert="{status:true,type:'alert-danger',text: 'Error sorry',dismissible:true}"></alert>
 ´´´
 
