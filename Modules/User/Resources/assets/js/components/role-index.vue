@@ -26,7 +26,7 @@
                                             <span class="arrow" :class="sortOrders[col.name] > 0 ? 'asc' : 'dsc'">
                                             </span>
                                         </th>
-                                        <th scope="col">Actions</th>
+                                        <th scope="col">{{trans.table.actions}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -38,12 +38,12 @@
                                             <button type="button"
                                                 class="btn btn-outline-primary"
                                                 @click="editForm(item)">
-                                            Edit
+                                            {{trans.btn.edit}}
                                             </button>
                                             <button type="button"
                                                 class="btn btn-outline-danger"
                                                 @click="deleteItem(item, index)">
-                                            Delete
+                                            {{trans.btn.delete}}
                                             </button>
                                         </td>
                                     </tr>
@@ -62,7 +62,7 @@
 
                                 <div class="col-12 col-sm-4">
                                     <div class="records-pages form-group row d-flex justify-content-center">
-                                        <label for="selectRecordsPages" class="mx-2">Records per Page:</label>
+                                        <label for="selectRecordsPages" class="mx-2">{{trans.pagination.records}}:</label>
                                         <select name="selectRecordsPages" v-model="selectedRecords" @change="changeRecordsPerPage()">
                                             <option  v-for="(num,index) in recordsPerPage" :key="index"
                                                 :value="num"
@@ -81,23 +81,23 @@
                                             <li class="page-item pointer" v-if="pagination.currentPage!=1">
                                                 <a class="page-link" @click="changePage('first')" title="First Page">
                                                     <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">First</span>
+                                                    <span class="sr-only">{{trans.pagination.first}}</span>
                                                 </a>
                                             </li>
 
                                             <!-- Back -->
                                             <li class="page-item pointer" v-if="pagination.currentPage != 1">
                                                 <a class="page-link" @click="changePage('back')" title="Previous">
-                                                    <span aria-hidden="true">Previous</span>
-                                                    <span class="sr-only">Previous</span>
+                                                    <span aria-hidden="true">{{trans.pagination.previous}}</span>
+                                                    <span class="sr-only">{{trans.pagination.previous}}</span>
                                                 </a>
                                             </li>
 
                                             <!-- Next -->
                                             <li class="page-item pointer" v-if="pagination.currentPage < pagination.lastPage">
                                                 <a class="page-link" v-on:click="changePage('next')" title="Next">
-                                                    <span aria-hidden="true">Next</span>
-                                                    <span class="sr-only">Next</span>
+                                                    <span aria-hidden="true">{{trans.pagination.next}}</span>
+                                                    <span class="sr-only">{{trans.pagination.next}}</span>
                                                 </a>
                                             </li>
 
@@ -105,7 +105,7 @@
                                             <li class="page-item pointer" v-if="pagination.currentPage!=pagination.lastPage">
                                                 <a class="page-link" v-on:click="changePage('last')" title="Last Page">
                                                     <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">Last</span>
+                                                    <span class="sr-only">{{trans.pagination.last}}</span>
                                                 </a>
                                             </li>
 
@@ -115,7 +115,7 @@
 
                                 <div class="col-12 col-sm-4">
                                     <div class="pagination-pages form-group row d-flex justify-content-center">
-                                    <label for="selectCurrentPage" class="mx-2">Current Page:</label>
+                                    <label for="selectCurrentPage" class="mx-2">{{trans.pagination.current}}:</label>
                                     <select name="selectCurrentPage" v-model="selectedPage" @change="changePage('page')">
                                         <option  v-for="(num,index) in pagination.lastPage" :key="index"
                                             :value="num"
@@ -142,26 +142,26 @@
 
                     <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
                         <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">Update Role</div>
+                            <div class="card-header text-uppercase font-weight-bold">{{trans.form.edit.title}}</div>
                             <div class="card-body">
                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
-                                <button class="btn btn-primary" type="submit">Update</button>
+                                <button class="btn btn-primary" type="submit">{{trans.btn.update}}</button>
                                 <button class="btn btn-danger" type="submit"
-                                    @click="cancelUpdate">Cancel</button>
+                                    @click="cancelUpdate">{{trans.btn.cancel}}</button>
                             </div>
                         </div>
                     </form>
 
                     <form @submit.prevent="addItem" v-else>
                         <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">Add Role</div>
+                            <div class="card-header text-uppercase font-weight-bold">{{trans.form.add.title}}</div>
                             <div class="card-body">
                                 <label for="inputName">Name</label>
                                 <input type="text" class="form-control mb-2"
                                     placeholder="Name" v-model="item.name">
-                                <button class="btn btn-primary" type="submit">Add</button>
+                                <button class="btn btn-primary" type="submit">{{trans.btn.add}}</button>
                             </div>
                         </div>
                     </form>
@@ -228,7 +228,43 @@ export default {
             pagination:{},
             selectedPage: 1,
             recordsPerPage:[12,25,50,100],
-            selectedRecords: 12
+            selectedRecords: 12,
+            trans:{
+                table:{
+                    actions: 'Actions',
+                },
+                btn:{
+                    add: 'Add',
+                    update: 'Update',
+                    edit: 'Edit',
+                    cancel: 'Cancel',
+                    delete: 'Delete'
+                },
+                form:{
+                    add:{
+                        title: 'Add '+this.title
+                    },
+                    edit:{
+                        title: 'Update '+this.title
+                    }
+                },
+                pagination:{
+                    records: 'Records per Page',
+                    current: 'Current Page',
+                    first: 'First',
+                    previous: 'Previous',
+                    next: 'Next',
+                    last: 'Last'
+                },
+                messages:{
+                    itemAdded: 'Item Added :)',
+                    itemUpdated: 'Item Updated :)',
+                    error: 'Error :( ',
+                },
+                validations:{
+                    required: 'is required'
+                }
+            }
         }
     },
     methods:{
@@ -265,7 +301,7 @@ export default {
                 this.loading = true
                 axios.post(this.path, {attributes:this.item})
                 .then((response) =>{
-                    alert("Item Added :)")
+                    alert(this.trans.messages.itemAdded)
                     this.cleanValues()
                     this.data.push(response.data.data);
                 }).catch(error => {
@@ -301,7 +337,7 @@ export default {
                     );
                     this.data[index] = response.data.data;
                     this.cleanValues();
-                    alert("Item Updated :)")
+                    alert(this.trans.messages.itemUpdated)
                 }).catch(error=>{
                     this.catchErrors(error)
                     console.log(error)
@@ -319,7 +355,7 @@ export default {
                     this.data.splice(index, 1);
                     alert(response.data.data);
                 }).catch(error=>{
-                    alert("Error :(")
+                    alert(this.trans.messages.error)
                     console.log(error)
                 })
                 .finally(() => this.loading = false)
@@ -350,7 +386,7 @@ export default {
 
             if (!this.item.name){
                 this.errors.push({
-                    "name":"Name is required"
+                    "name":"Name "+this.trans.validations.required
                 });
             }
 

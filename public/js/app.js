@@ -2669,7 +2669,43 @@ __webpack_require__.r(__webpack_exports__);
       pagination: {},
       selectedPage: 1,
       recordsPerPage: [12, 25, 50, 100],
-      selectedRecords: 12
+      selectedRecords: 12,
+      trans: {
+        table: {
+          actions: 'Actions'
+        },
+        btn: {
+          add: 'Add',
+          update: 'Update',
+          edit: 'Edit',
+          cancel: 'Cancel',
+          "delete": 'Delete'
+        },
+        form: {
+          add: {
+            title: 'Add ' + this.title
+          },
+          edit: {
+            title: 'Update ' + this.title
+          }
+        },
+        pagination: {
+          records: 'Records per Page',
+          current: 'Current Page',
+          first: 'First',
+          previous: 'Previous',
+          next: 'Next',
+          last: 'Last'
+        },
+        messages: {
+          itemAdded: 'Item Added :)',
+          itemUpdated: 'Item Updated :)',
+          error: 'Error :( '
+        },
+        validations: {
+          required: 'is required'
+        }
+      }
     };
   },
   methods: {
@@ -2706,7 +2742,7 @@ __webpack_require__.r(__webpack_exports__);
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.path, {
           attributes: this.item
         }).then(function (response) {
-          alert("Item Added :)");
+          alert(_this2.trans.messages.itemAdded);
 
           _this2.cleanValues();
 
@@ -2748,7 +2784,7 @@ __webpack_require__.r(__webpack_exports__);
 
           _this3.cleanValues();
 
-          alert("Item Updated :)");
+          alert(_this3.trans.messages.itemUpdated);
         })["catch"](function (error) {
           _this3.catchErrors(error);
 
@@ -2770,7 +2806,7 @@ __webpack_require__.r(__webpack_exports__);
 
           alert(response.data.data);
         })["catch"](function (error) {
-          alert("Error :(");
+          alert(_this4.trans.messages.error);
           console.log(error);
         })["finally"](function () {
           return _this4.loading = false;
@@ -2798,7 +2834,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!this.item.name) {
         this.errors.push({
-          "name": "Name is required"
+          "name": "Name " + this.trans.validations.required
         });
       }
 
@@ -40445,7 +40481,7 @@ var render = function() {
                                 }),
                                 _vm._v(" "),
                                 _c("th", { attrs: { scope: "col" } }, [
-                                  _vm._v("Actions")
+                                  _vm._v(_vm._s(_vm.trans.table.actions))
                                 ])
                               ],
                               2
@@ -40476,7 +40512,9 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                        Edit\n                                        "
+                                        "\n                                        " +
+                                          _vm._s(_vm.trans.btn.edit) +
+                                          "\n                                        "
                                       )
                                     ]
                                   ),
@@ -40494,7 +40532,9 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                                        Delete\n                                        "
+                                        "\n                                        " +
+                                          _vm._s(_vm.trans.btn.delete) +
+                                          "\n                                        "
                                       )
                                     ]
                                   )
@@ -40528,7 +40568,11 @@ var render = function() {
                                   staticClass: "mx-2",
                                   attrs: { for: "selectRecordsPages" }
                                 },
-                                [_vm._v("Records per Page:")]
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.trans.pagination.records) + ":"
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(
@@ -40634,7 +40678,13 @@ var render = function() {
                                               _c(
                                                 "span",
                                                 { staticClass: "sr-only" },
-                                                [_vm._v("First")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination.first
+                                                    )
+                                                  )
+                                                ]
                                               )
                                             ]
                                           )
@@ -40666,13 +40716,27 @@ var render = function() {
                                                     "aria-hidden": "true"
                                                   }
                                                 },
-                                                [_vm._v("Previous")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination
+                                                        .previous
+                                                    )
+                                                  )
+                                                ]
                                               ),
                                               _vm._v(" "),
                                               _c(
                                                 "span",
                                                 { staticClass: "sr-only" },
-                                                [_vm._v("Previous")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination
+                                                        .previous
+                                                    )
+                                                  )
+                                                ]
                                               )
                                             ]
                                           )
@@ -40705,13 +40769,25 @@ var render = function() {
                                                     "aria-hidden": "true"
                                                   }
                                                 },
-                                                [_vm._v("Next")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination.next
+                                                    )
+                                                  )
+                                                ]
                                               ),
                                               _vm._v(" "),
                                               _c(
                                                 "span",
                                                 { staticClass: "sr-only" },
-                                                [_vm._v("Next")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination.next
+                                                    )
+                                                  )
+                                                ]
                                               )
                                             ]
                                           )
@@ -40750,7 +40826,13 @@ var render = function() {
                                               _c(
                                                 "span",
                                                 { staticClass: "sr-only" },
-                                                [_vm._v("Last")]
+                                                [
+                                                  _vm._v(
+                                                    _vm._s(
+                                                      _vm.trans.pagination.last
+                                                    )
+                                                  )
+                                                ]
                                               )
                                             ]
                                           )
@@ -40777,7 +40859,11 @@ var render = function() {
                                   staticClass: "mx-2",
                                   attrs: { for: "selectCurrentPage" }
                                 },
-                                [_vm._v("Current Page:")]
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.trans.pagination.current) + ":"
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(
@@ -40866,7 +40952,7 @@ var render = function() {
                             staticClass:
                               "card-header text-uppercase font-weight-bold"
                           },
-                          [_vm._v("Update Role")]
+                          [_vm._v(_vm._s(_vm.trans.form.edit.title))]
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
@@ -40902,7 +40988,7 @@ var render = function() {
                               staticClass: "btn btn-primary",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Update")]
+                            [_vm._v(_vm._s(_vm.trans.btn.update))]
                           ),
                           _vm._v(" "),
                           _c(
@@ -40912,7 +40998,7 @@ var render = function() {
                               attrs: { type: "submit" },
                               on: { click: _vm.cancelUpdate }
                             },
-                            [_vm._v("Cancel")]
+                            [_vm._v(_vm._s(_vm.trans.btn.cancel))]
                           )
                         ])
                       ])
@@ -40936,7 +41022,7 @@ var render = function() {
                             staticClass:
                               "card-header text-uppercase font-weight-bold"
                           },
-                          [_vm._v("Add Role")]
+                          [_vm._v(_vm._s(_vm.trans.form.add.title))]
                         ),
                         _vm._v(" "),
                         _c("div", { staticClass: "card-body" }, [
@@ -40972,7 +41058,7 @@ var render = function() {
                               staticClass: "btn btn-primary",
                               attrs: { type: "submit" }
                             },
-                            [_vm._v("Add")]
+                            [_vm._v(_vm._s(_vm.trans.btn.add))]
                           )
                         ])
                       ])
@@ -40994,8 +41080,7 @@ var render = function() {
                                 status: true,
                                 type: "alert-danger",
                                 text: error.name,
-                                dismissible: true,
-                                rand: index
+                                dismissible: true
                               }
                             }
                           })
