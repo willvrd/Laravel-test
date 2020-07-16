@@ -15,7 +15,7 @@
 
         @can("user.roles.index")
             <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.roles.index')}}">
-                {{ __('user::roles.title.roles') }}
+                {{ trans_choice('user::roles.title.role', 2) }}
             </a>
         @endcan
 

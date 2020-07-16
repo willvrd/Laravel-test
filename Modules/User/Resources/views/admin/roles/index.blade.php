@@ -5,7 +5,7 @@
 @section('content')
 
     <role-index
-        title="{{ __("user::roles.title.roles") }}"
+        :title="{singular:'{{trans_choice('user::roles.title.role', 1)}}',plural:'{{trans_choice('user::roles.title.role', 2)}}'}"
         path="{{route(app()->getLocale().'.api.user.roles.index')}}">
     </role-index>
 

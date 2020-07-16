@@ -10,7 +10,7 @@
                 <section>
 
                     <div class="card">
-                        <div class="card-header text-uppercase font-weight-bold">{{title}}</div>
+                        <div class="card-header text-uppercase font-weight-bold">{{title.plural}}</div>
 
                         <div class="card-body">
 
@@ -212,8 +212,8 @@ import axios from 'axios';
 
 export default {
     props: {
-        title: String,
-        path: String
+        title:{type: Object,required: true},
+        path:{type: String,required: true}
     },
     mounted() {
         this.$nextTick(function () {
@@ -270,10 +270,10 @@ export default {
                 },
                 form:{
                     add:{
-                        title: 'Add '+this.title
+                        title: 'Add '+this.title.singular
                     },
                     edit:{
-                        title: 'Update '+this.title
+                        title: 'Update '+this.title.singular
                     }
                 },
                 pagination:{

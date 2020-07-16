@@ -2645,12 +2645,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    title: String,
-    path: String
+    title: {
+      type: Object,
+      required: true
+    },
+    path: {
+      type: String,
+      required: true
+    }
   },
   mounted: function mounted() {
     this.$nextTick(function () {
@@ -2712,10 +2717,10 @@ __webpack_require__.r(__webpack_exports__);
         },
         form: {
           add: {
-            title: 'Add ' + this.title
+            title: 'Add ' + this.title.singular
           },
           edit: {
-            title: 'Update ' + this.title
+            title: 'Update ' + this.title.singular
           }
         },
         pagination: {
@@ -40487,7 +40492,7 @@ var render = function() {
                   {
                     staticClass: "card-header text-uppercase font-weight-bold"
                   },
-                  [_vm._v(_vm._s(_vm.title))]
+                  [_vm._v(_vm._s(_vm.title.plural))]
                 ),
                 _vm._v(" "),
                 _c(
