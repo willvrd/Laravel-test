@@ -14,6 +14,28 @@
 
                         <div class="card-body">
 
+                            <div class="row">
+                                <div class="col-md-6">&nbsp;</div>
+                                <div class="col-md-6">
+                                    <!-- Search Table -->
+                                    <form @submit.prevent="searchItem" id="search">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">{{trans.table.search}}</span>
+                                            </div>
+                                            <input type="text"
+                                            class="form-control"
+                                            :placeholder="trans.table.searchText"
+                                            :aria-label="trans.table.searchText"
+                                            aria-describedby="basic-addon1"
+                                            name="query"
+                                            v-model="searchQuery"
+                                            :disabled="loading?true:false">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                             <table v-if="data.length>0" class="table">
                                 <thead class="thead-dark">
                                     <tr>
@@ -235,6 +257,9 @@ export default {
             trans:{
                 table:{
                     actions: 'Actions',
+                    search: 'Search',
+                    searchText: 'Type here and press enter',
+                    notResults: 'Not results available for now :)'
                 },
                 btn:{
                     add: 'Add',
@@ -267,6 +292,14 @@ export default {
                 validations:{
                     required: 'is required'
                 }
+            },
+            searchQuery: ''
+        }
+    },
+    watch: {
+        searchQuery: function(newValue, oldValue) {
+            if(!newValue){
+                this.getData()
             }
         }
     },
@@ -281,13 +314,26 @@ export default {
         getData(){
 
             this.loading = true
+            this.alertTable.status = false
+
             this.params.take = this.selectedRecords
+
+            if(this.params.filter.search)
+                this.params.filter.search = ""
+            if(this.searchQuery)
+                this.params.filter.search = this.searchQuery
 
             axios.get(this.path, {params:this.params})
             .then(response => {
                 this.data = response.data.data;
-                this.pagination = response.data.meta.page
-                this.selectedPage = this.pagination.currentPage
+                if(this.data.length>0){
+                    this.pagination = response.data.meta.page
+                    this.selectedPage = this.pagination.currentPage
+                }else{
+                    this.alertTable.status = true
+                    this.alertTable.text = this.trans.table.notResults
+                }
+
             })
             .catch(error => {
                 console.log(error)
@@ -448,6 +494,12 @@ export default {
             return string.replace(/[\w]([A-Z0-9])/g, function (m) {
                 return m[0] + '_' + m[1]
             }).toLowerCase()
+        },
+        searchItem(){
+
+            if(this.searchQuery)
+               this.getData()
+
         }
 
     }

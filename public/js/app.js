@@ -2623,6 +2623,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2675,7 +2698,10 @@ __webpack_require__.r(__webpack_exports__);
       selectedRecords: 12,
       trans: {
         table: {
-          actions: 'Actions'
+          actions: 'Actions',
+          search: 'Search',
+          searchText: 'Type here and press enter',
+          notResults: 'Not results available for now :)'
         },
         btn: {
           add: 'Add',
@@ -2708,8 +2734,16 @@ __webpack_require__.r(__webpack_exports__);
         validations: {
           required: 'is required'
         }
-      }
+      },
+      searchQuery: ''
     };
+  },
+  watch: {
+    searchQuery: function searchQuery(newValue, oldValue) {
+      if (!newValue) {
+        this.getData();
+      }
+    }
   },
   methods: {
     init: function init() {
@@ -2721,13 +2755,22 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
+      this.alertTable.status = false;
       this.params.take = this.selectedRecords;
+      if (this.params.filter.search) this.params.filter.search = "";
+      if (this.searchQuery) this.params.filter.search = this.searchQuery;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.path, {
         params: this.params
       }).then(function (response) {
         _this.data = response.data.data;
-        _this.pagination = response.data.meta.page;
-        _this.selectedPage = _this.pagination.currentPage;
+
+        if (_this.data.length > 0) {
+          _this.pagination = response.data.meta.page;
+          _this.selectedPage = _this.pagination.currentPage;
+        } else {
+          _this.alertTable.status = true;
+          _this.alertTable.text = _this.trans.table.notResults;
+        }
       })["catch"](function (error) {
         console.log(error);
         _this.alertTable.status = true;
@@ -2852,7 +2895,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     changeOrderBy: function changeOrderBy(field) {
       var tField = this.transformToSnakeCase(field);
-      console.warn(tField);
       this.params.filter.order.field = tField;
       if (this.params.filter.order.way == "asc") this.params.filter.order.way = "desc";else this.params.filter.order.way = "asc";
       this.sortOrders[field] = this.sortOrders[field] * -1;
@@ -2882,6 +2924,9 @@ __webpack_require__.r(__webpack_exports__);
       return string.replace(/[\w]([A-Z0-9])/g, function (m) {
         return m[0] + '_' + m[1];
       }).toLowerCase();
+    },
+    searchItem: function searchItem() {
+      if (this.searchQuery) this.getData();
     }
   }
 });
@@ -40449,6 +40494,72 @@ var render = function() {
                   "div",
                   { staticClass: "card-body" },
                   [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [_vm._v(" ")]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "form",
+                          {
+                            attrs: { id: "search" },
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.searchItem($event)
+                              }
+                            }
+                          },
+                          [
+                            _c("div", { staticClass: "input-group mb-3" }, [
+                              _c(
+                                "div",
+                                { staticClass: "input-group-prepend" },
+                                [
+                                  _c(
+                                    "span",
+                                    {
+                                      staticClass: "input-group-text",
+                                      attrs: { id: "basic-addon1" }
+                                    },
+                                    [_vm._v(_vm._s(_vm.trans.table.search))]
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.searchQuery,
+                                    expression: "searchQuery"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  placeholder: _vm.trans.table.searchText,
+                                  "aria-label": _vm.trans.table.searchText,
+                                  "aria-describedby": "basic-addon1",
+                                  name: "query",
+                                  disabled: _vm.loading ? true : false
+                                },
+                                domProps: { value: _vm.searchQuery },
+                                on: {
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.searchQuery = $event.target.value
+                                  }
+                                }
+                              })
+                            ])
+                          ]
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
                     _vm.data.length > 0
                       ? _c("table", { staticClass: "table" }, [
                           _c("thead", { staticClass: "thead-dark" }, [
