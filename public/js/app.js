@@ -2620,6 +2620,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2663,7 +2666,7 @@ __webpack_require__.r(__webpack_exports__);
         name: "name"
       }, {
         title: "Created At",
-        name: "created_at"
+        name: "createdAt"
       }],
       sortOrders: {},
       pagination: {},
@@ -2848,7 +2851,9 @@ __webpack_require__.r(__webpack_exports__);
       this.sortOrders = sortOrders;
     },
     changeOrderBy: function changeOrderBy(field) {
-      this.params.filter.order.field = field;
+      var tField = this.transformToSnakeCase(field);
+      console.warn(tField);
+      this.params.filter.order.field = tField;
       if (this.params.filter.order.way == "asc") this.params.filter.order.way = "desc";else this.params.filter.order.way = "asc";
       this.sortOrders[field] = this.sortOrders[field] * -1;
       this.getData();
@@ -2872,6 +2877,11 @@ __webpack_require__.r(__webpack_exports__);
       this.params.take = this.selectedRecords;
       this.params.page = 1;
       this.getData();
+    },
+    transformToSnakeCase: function transformToSnakeCase(string) {
+      return string.replace(/[\w]([A-Z0-9])/g, function (m) {
+        return m[0] + '_' + m[1];
+      }).toLowerCase();
     }
   }
 });
@@ -40491,55 +40501,64 @@ var render = function() {
                           _c(
                             "tbody",
                             _vm._l(_vm.data, function(item, index) {
-                              return _c("tr", { key: index }, [
-                                _c("td", [_vm._v(_vm._s(item.id))]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(item.name))]),
-                                _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(item.createdAt))]),
-                                _vm._v(" "),
-                                _c("td", [
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-outline-primary",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.editForm(item)
-                                        }
-                                      }
-                                    },
-                                    [
+                              return _c(
+                                "tr",
+                                { key: index },
+                                [
+                                  _vm._l(_vm.columns, function(col, index2) {
+                                    return _c("td", { key: index2 }, [
                                       _vm._v(
                                         "\n                                        " +
-                                          _vm._s(_vm.trans.btn.edit) +
-                                          "\n                                        "
+                                          _vm._s(item[col.name]) +
+                                          "\n                                    "
                                       )
-                                    ]
-                                  ),
+                                    ])
+                                  }),
                                   _vm._v(" "),
-                                  _c(
-                                    "button",
-                                    {
-                                      staticClass: "btn btn-outline-danger",
-                                      attrs: { type: "button" },
-                                      on: {
-                                        click: function($event) {
-                                          return _vm.deleteItem(item, index)
+                                  _c("td", [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-primary",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.editForm(item)
+                                          }
                                         }
-                                      }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\n                                        " +
-                                          _vm._s(_vm.trans.btn.delete) +
-                                          "\n                                        "
-                                      )
-                                    ]
-                                  )
-                                ])
-                              ])
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(_vm.trans.btn.edit) +
+                                            "\n                                        "
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-outline-danger",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.deleteItem(item, index)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                                        " +
+                                            _vm._s(_vm.trans.btn.delete) +
+                                            "\n                                        "
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ],
+                                2
+                              )
                             }),
                             0
                           )

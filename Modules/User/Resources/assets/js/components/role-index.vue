@@ -31,9 +31,11 @@
                                 </thead>
                                 <tbody>
                                     <tr  v-for="(item, index) in data" :key="index">
-                                        <td>{{item.id}}</td>
-                                        <td>{{item.name}}</td>
-                                        <td>{{item.createdAt}}</td>
+
+                                        <td v-for="(col,index2) in columns" :key="index2">
+                                            {{item[col.name]}}
+                                        </td>
+
                                         <td>
                                             <button type="button"
                                                 class="btn btn-outline-primary"
@@ -46,6 +48,7 @@
                                             {{trans.btn.delete}}
                                             </button>
                                         </td>
+
                                     </tr>
                                 </tbody>
                             </table>
@@ -222,7 +225,7 @@ export default {
             columns: [
                 {title:"Id",name: "id"},
                 {title:"Name",name: "name"},
-                {title:"Created At",name: "created_at"}
+                {title:"Created At",name: "createdAt"}
             ],
             sortOrders: {},
             pagination:{},
@@ -402,7 +405,9 @@ export default {
         },
         changeOrderBy(field){
 
-            this.params.filter.order.field = field
+            let tField = this.transformToSnakeCase(field)
+
+            this.params.filter.order.field = tField
 
             if(this.params.filter.order.way=="asc")
                 this.params.filter.order.way="desc"
@@ -438,8 +443,12 @@ export default {
             this.params.page = 1
             this.getData();
 
+        },
+        transformToSnakeCase(string) {
+            return string.replace(/[\w]([A-Z0-9])/g, function (m) {
+                return m[0] + '_' + m[1]
+            }).toLowerCase()
         }
-
 
     }
 }
