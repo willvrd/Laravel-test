@@ -15,7 +15,20 @@
                         <div class="card-body">
 
                             <div class="row">
-                                <div class="col-md-6">&nbsp;</div>
+                                <div class="col-md-6">
+                                    <!-- Records per Page -->
+                                    <div class="records-pages form-group row">
+                                        <label for="selectRecordsPages" class="mx-2">{{trans.pagination.records}}:</label>
+                                        <select name="selectRecordsPages" v-model="selectedRecords" @change="changeRecordsPerPage()">
+                                            <option  v-for="(num,index) in recordsPerPage" :key="index"
+                                                :value="num"
+                                                >
+                                                {{num}}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                </div>
                                 <div class="col-md-6">
                                     <!-- Search Table -->
                                     <form @submit.prevent="searchItem" id="search">
@@ -81,78 +94,68 @@
                         </div>
 
                         <div class="card-footer">
+                            <div v-if="pagination.total > 1"  class="row">
 
-                            <!-- Pagination -->
-                            <div v-if="pagination.total > 1" class="row">
+                                <!-- Total Records -->
+                                <div class="col-12 col-sm-4">
+                                    {{trans.table.totalRecords}}: {{pagination.total}}
+                                </div>
+
+                                <!-- Pagination -->
+                                <div class="col-12 col-sm-4">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination d-flex justify-content-center">
+
+                                                <!-- First -->
+                                                <li class="page-item pointer" v-if="pagination.currentPage!=1">
+                                                    <a class="page-link" @click="changePage('first')" title="First Page">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span class="sr-only">{{trans.pagination.first}}</span>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Back -->
+                                                <li class="page-item pointer" v-if="pagination.currentPage != 1">
+                                                    <a class="page-link" @click="changePage('back')" title="Previous">
+                                                        <span aria-hidden="true">{{trans.pagination.previous}}</span>
+                                                        <span class="sr-only">{{trans.pagination.previous}}</span>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Next -->
+                                                <li class="page-item pointer" v-if="pagination.currentPage < pagination.lastPage">
+                                                    <a class="page-link" v-on:click="changePage('next')" title="Next">
+                                                        <span aria-hidden="true">{{trans.pagination.next}}</span>
+                                                        <span class="sr-only">{{trans.pagination.next}}</span>
+                                                    </a>
+                                                </li>
+
+                                                <!-- Last -->
+                                                <li class="page-item pointer" v-if="pagination.currentPage!=pagination.lastPage">
+                                                    <a class="page-link" v-on:click="changePage('last')" title="Last Page">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                        <span class="sr-only">{{trans.pagination.last}}</span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </nav>
+                                </div>
 
                                 <div class="col-12 col-sm-4">
-                                    <div class="records-pages form-group row d-flex justify-content-center">
-                                        <label for="selectRecordsPages" class="mx-2">{{trans.pagination.records}}:</label>
-                                        <select name="selectRecordsPages" v-model="selectedRecords" @change="changeRecordsPerPage()">
-                                            <option  v-for="(num,index) in recordsPerPage" :key="index"
+                                        <div class="pagination-pages form-group row d-flex justify-content-center">
+                                        <label for="selectCurrentPage" class="mx-2">{{trans.pagination.current}}:</label>
+                                        <select name="selectCurrentPage" v-model="selectedPage" @change="changePage('page')">
+                                            <option  v-for="(num,index) in pagination.lastPage" :key="index"
                                                 :value="num"
                                                 >
                                                 {{num}}
                                             </option>
                                         </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-sm-4">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination d-flex justify-content-center">
-
-                                            <!-- First -->
-                                            <li class="page-item pointer" v-if="pagination.currentPage!=1">
-                                                <a class="page-link" @click="changePage('first')" title="First Page">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                    <span class="sr-only">{{trans.pagination.first}}</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Back -->
-                                            <li class="page-item pointer" v-if="pagination.currentPage != 1">
-                                                <a class="page-link" @click="changePage('back')" title="Previous">
-                                                    <span aria-hidden="true">{{trans.pagination.previous}}</span>
-                                                    <span class="sr-only">{{trans.pagination.previous}}</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Next -->
-                                            <li class="page-item pointer" v-if="pagination.currentPage < pagination.lastPage">
-                                                <a class="page-link" v-on:click="changePage('next')" title="Next">
-                                                    <span aria-hidden="true">{{trans.pagination.next}}</span>
-                                                    <span class="sr-only">{{trans.pagination.next}}</span>
-                                                </a>
-                                            </li>
-
-                                            <!-- Last -->
-                                            <li class="page-item pointer" v-if="pagination.currentPage!=pagination.lastPage">
-                                                <a class="page-link" v-on:click="changePage('last')" title="Last Page">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                    <span class="sr-only">{{trans.pagination.last}}</span>
-                                                </a>
-                                            </li>
-
-                                        </ul>
-                                    </nav>
-                                </div>
-
-                                <div class="col-12 col-sm-4">
-                                    <div class="pagination-pages form-group row d-flex justify-content-center">
-                                    <label for="selectCurrentPage" class="mx-2">{{trans.pagination.current}}:</label>
-                                    <select name="selectCurrentPage" v-model="selectedPage" @change="changePage('page')">
-                                        <option  v-for="(num,index) in pagination.lastPage" :key="index"
-                                            :value="num"
-                                            >
-                                            {{num}}
-                                        </option>
-                                    </select>
-                                    </div>
+                                        </div>
                                 </div>
 
                             </div>
-
                         </div>
 
                     </div>
@@ -259,7 +262,8 @@ export default {
                     actions: 'Actions',
                     search: 'Search',
                     searchText: 'Type here and press enter',
-                    notResults: 'Not results available for now :)'
+                    notResults: 'Not results available for now :)',
+                    totalRecords: 'Total records'
                 },
                 btn:{
                     add: 'Add',

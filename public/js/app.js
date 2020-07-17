@@ -2645,6 +2645,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2706,7 +2709,8 @@ __webpack_require__.r(__webpack_exports__);
           actions: 'Actions',
           search: 'Search',
           searchText: 'Type here and press enter',
-          notResults: 'Not results available for now :)'
+          notResults: 'Not results available for now :)',
+          totalRecords: 'Total records'
         },
         btn: {
           add: 'Add',
@@ -40500,7 +40504,79 @@ var render = function() {
                   { staticClass: "card-body" },
                   [
                     _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-6" }, [_vm._v(" ")]),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c(
+                          "div",
+                          { staticClass: "records-pages form-group row" },
+                          [
+                            _c(
+                              "label",
+                              {
+                                staticClass: "mx-2",
+                                attrs: { for: "selectRecordsPages" }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(_vm.trans.pagination.records) + ":"
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selectedRecords,
+                                    expression: "selectedRecords"
+                                  }
+                                ],
+                                attrs: { name: "selectRecordsPages" },
+                                on: {
+                                  change: [
+                                    function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.selectedRecords = $event.target
+                                        .multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    },
+                                    function($event) {
+                                      return _vm.changeRecordsPerPage()
+                                    }
+                                  ]
+                                }
+                              },
+                              _vm._l(_vm.recordsPerPage, function(num, index) {
+                                return _c(
+                                  "option",
+                                  { key: index, domProps: { value: num } },
+                                  [
+                                    _vm._v(
+                                      "\n                                            " +
+                                        _vm._s(num) +
+                                        "\n                                        "
+                                    )
+                                  ]
+                                )
+                              }),
+                              0
+                            )
+                          ]
+                        )
+                      ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-md-6" }, [
                         _c(
@@ -40690,82 +40766,12 @@ var render = function() {
                   _vm.pagination.total > 1
                     ? _c("div", { staticClass: "row" }, [
                         _c("div", { staticClass: "col-12 col-sm-4" }, [
-                          _c(
-                            "div",
-                            {
-                              staticClass:
-                                "records-pages form-group row d-flex justify-content-center"
-                            },
-                            [
-                              _c(
-                                "label",
-                                {
-                                  staticClass: "mx-2",
-                                  attrs: { for: "selectRecordsPages" }
-                                },
-                                [
-                                  _vm._v(
-                                    _vm._s(_vm.trans.pagination.records) + ":"
-                                  )
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "select",
-                                {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.selectedRecords,
-                                      expression: "selectedRecords"
-                                    }
-                                  ],
-                                  attrs: { name: "selectRecordsPages" },
-                                  on: {
-                                    change: [
-                                      function($event) {
-                                        var $$selectedVal = Array.prototype.filter
-                                          .call($event.target.options, function(
-                                            o
-                                          ) {
-                                            return o.selected
-                                          })
-                                          .map(function(o) {
-                                            var val =
-                                              "_value" in o ? o._value : o.value
-                                            return val
-                                          })
-                                        _vm.selectedRecords = $event.target
-                                          .multiple
-                                          ? $$selectedVal
-                                          : $$selectedVal[0]
-                                      },
-                                      function($event) {
-                                        return _vm.changeRecordsPerPage()
-                                      }
-                                    ]
-                                  }
-                                },
-                                _vm._l(_vm.recordsPerPage, function(
-                                  num,
-                                  index
-                                ) {
-                                  return _c(
-                                    "option",
-                                    { key: index, domProps: { value: num } },
-                                    [
-                                      _vm._v(
-                                        "\n                                            " +
-                                          _vm._s(num) +
-                                          "\n                                        "
-                                      )
-                                    ]
-                                  )
-                                }),
-                                0
-                              )
-                            ]
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(_vm.trans.table.totalRecords) +
+                              ": " +
+                              _vm._s(_vm.pagination.total) +
+                              "\n                            "
                           )
                         ]),
                         _vm._v(" "),
@@ -41047,9 +41053,9 @@ var render = function() {
                                     { key: index, domProps: { value: num } },
                                     [
                                       _vm._v(
-                                        "\n                                        " +
+                                        "\n                                            " +
                                           _vm._s(num) +
-                                          "\n                                    "
+                                          "\n                                        "
                                       )
                                     ]
                                   )
