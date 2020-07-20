@@ -26,7 +26,7 @@
 
         @include('partials.header')
 
-        <nav class="navbar navbar-expand-md navbar-light bg-primary shadow-sm">
+        <nav class="navbar fixed-top navbar-expand-md navbar-light bg-primary shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -90,7 +90,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-5 mt-5">
             @yield('content')
         </main>
 

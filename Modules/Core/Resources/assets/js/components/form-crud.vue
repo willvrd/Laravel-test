@@ -1,0 +1,184 @@
+<template>
+    <div>
+
+        <section class="forms">
+
+            <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
+                <div class="card">
+                    <div class="card-header text-uppercase font-weight-bold">{{trans.form.edit.title}}</div>
+                    <div class="card-body">
+                        <label for="inputName">Name</label>
+                        <input type="text" class="form-control mb-2"
+                                    placeholder="Name" v-model="item.name">
+                        <button class="btn btn-primary" type="submit">{{trans.btn.update}}</button>
+                        <button class="btn btn-danger" type="submit"
+                            @click="cancelUpdate">{{trans.btn.cancel}}</button>
+                    </div>
+                </div>
+            </form>
+
+            <form @submit.prevent="addItem" v-else>
+                <div class="card">
+                    <div class="card-header text-uppercase font-weight-bold">{{trans.form.add.title}}</div>
+                    <div class="card-body">
+                        <div v-for="(attr, index) in item" :key="index">
+
+                            <div v-if="attr.type=='text'" class="form-group">
+                                <label :for="'input_'+attr.name">{{attr.title}}</label>
+                                <input type="text" class="form-control mb-2"
+                                    :placeholder="attr.title" v-model="attr.value">
+                            </div>
+
+                            <div v-if="attr.type=='select'" class="form-group">
+                                <label :for="'input_'+attr.name">{{attr.title}}</label>
+                                <select :name="'select_'+attr.name" v-model="attr.value"  class="form-control">
+                                    <option value="">{{trans.form.selectOption}}</option>
+                                    <option  v-for="(opt,index) in attr.options" :key="index" :value="opt.value">
+                                        {{opt.title}}
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <button class="btn btn-primary" type="submit">{{trans.btn.add}}</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Errors Form -->
+            <section v-if="Object.keys(errors).length>0" class="errorsForm">
+                <div v-for="(error, index) in errors" :key="index">
+                    <alert :alert="{status:true,type:'alert-danger',text: error.name,dismissible:true}"></alert>
+                </div>
+            </section>
+
+        </section>
+
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        path:{type:String,required:true},
+        modeUpdate:{type: Boolean,required: true},
+        trans:{type: Object,required: true},
+        item:{type: Array,required: true},
+        loading:{type: Boolean,required: true},
+        hasChanged:{type: Boolean,required: true}
+    },
+    data() {
+        return {
+            errors: []
+        }
+    },
+    methods:{
+
+        addItem(){
+
+            this.errors = []
+
+            if(this.validateForm()){
+
+                this.emitLoading(true)
+                let attr = this.fixAttributesToSend()
+
+                axios.post(this.path, {attributes:attr})
+                .then((response) =>{
+                    alert(this.trans.messages.itemAdded)
+                    this.cleanValues()
+                    this.emitHasChanged(true)
+                }).catch(error => {
+                    this.catchErrors(error)
+                    console.log(error)
+                })
+                .finally(() =>  this.emitLoading(false))
+
+            }
+
+        },
+        updateItem(itemUp){
+
+            this.errors = []
+
+            if(this.validateForm()){
+                let attributes = {
+                    attributes:{
+                        name: itemUp.name
+                    }
+                };
+
+                this.emitLoading(true)
+                axios.put(this.path+`/${itemUp.id}`,attributes)
+                .then(response=>{
+                    this.emitMode(false)
+                    this.emitHasChanged(true)
+                    this.cleanValues();
+                    alert(this.trans.messages.itemUpdated)
+                }).catch(error=>{
+                    this.catchErrors(error)
+                    console.log(error)
+                })
+                .finally(() => this.emitLoading(false))
+            }
+
+        },
+        cancelUpdate(){
+            this.emitMode(false)
+            this.cleanValues()
+            this.errors = []
+        },
+        cleanValues(){
+
+            let newItem = this.item
+            newItem.forEach(attr => {
+                attr.value = ""
+            });
+            this.emitItem(newItem)
+
+        },
+        catchErrors(error){
+            if (error.response){
+                this.errors = JSON.parse(error.response.data.errors);
+            }
+        },
+        validateForm() {
+
+            this.errors = []
+
+            this.item.forEach(item => {
+                if(item.required && !item.value){
+                    this.errors.push({
+                        "name":item.title+" "+this.trans.validations.required
+                    });
+                }
+            });
+
+            if(Object.keys(this.errors).length==0)
+               return true
+
+            return false
+
+        },
+        emitMode(value){
+            this.$emit('modeUpdate',value);
+        },
+        emitItem(value){
+            this.$emit('item',value);
+        },
+        emitLoading(value){
+            this.$emit('loading',value);
+        },
+        emitHasChanged(value){
+            this.$emit('hasChanged',value);
+        },
+        fixAttributesToSend(){
+            let attr = {}
+            this.item.forEach(item => {
+               attr[item.name] = item.value
+            });
+            return attr
+        }
+    }
+}
+</script>

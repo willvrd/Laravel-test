@@ -19,6 +19,12 @@
             </a>
         @endcan
 
+        @can("user.permissions.index")
+            <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.permissions.index')}}">
+                {{ trans_choice('user::permissions.title.permission', 2) }}
+            </a>
+        @endcan
+
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.passport.index')}}">
             {{ __('user::passport.title.passport') }}

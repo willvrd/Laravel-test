@@ -19,6 +19,7 @@ Route::middleware('auth')->prefix('/user')->name('.user')->group(function(){
 
     require('BackendRoutes/userRoutes.php');
     require('BackendRoutes/rolesRoutes.php');
+    require('BackendRoutes/permissionsRoutes.php');
     require('BackendRoutes/passportRoutes.php');
 
 });

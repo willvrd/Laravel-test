@@ -94,6 +94,8 @@
                         </div>
 
                         <div class="card-footer">
+
+                            <!-- Pagination -->
                             <div v-if="pagination.total > 1"  class="row">
 
                                 <!-- Total Records -->
@@ -101,7 +103,7 @@
                                     {{trans.table.totalRecords}}: {{pagination.total}}
                                 </div>
 
-                                 <!-- Pages -->
+                                <!-- Pages -->
                                 <div class="col-12 col-sm-4">
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination d-flex justify-content-center">
@@ -157,6 +159,7 @@
                                 </div>
 
                             </div>
+
                         </div>
 
                     </div>
@@ -167,42 +170,12 @@
 
             <div class="col-md-3">
 
-                <section class="forms">
-
-                    <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
-                        <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">{{trans.form.edit.title}}</div>
-                            <div class="card-body">
-                                <label for="inputName">Name</label>
-                                <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name">
-                                <button class="btn btn-primary" type="submit">{{trans.btn.update}}</button>
-                                <button class="btn btn-danger" type="submit"
-                                    @click="cancelUpdate">{{trans.btn.cancel}}</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <form @submit.prevent="addItem" v-else>
-                        <div class="card">
-                            <div class="card-header text-uppercase font-weight-bold">{{trans.form.add.title}}</div>
-                            <div class="card-body">
-                                <label for="inputName">Name</label>
-                                <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name">
-                                <button class="btn btn-primary" type="submit">{{trans.btn.add}}</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Errors Form -->
-                    <section v-if="Object.keys(errors).length>0" class="errorsForm">
-                        <div v-for="(error, index) in errors" :key="index">
-                            <alert :alert="{status:true,type:'alert-danger',text: error.name,dismissible:true}"></alert>
-                        </div>
-                    </section>
-
-                </section>
+                <form-crud :path="path" :trans="trans"
+                    :modeUpdate="modeUpdate" @modeUpdate="modeUpdate = $event"
+                    :item="item" @item="item = $event"
+                    :loading="loading" @loading="loading = $event"
+                    :hasChanged="hasChanged" @hasChanged="hasChanged = $event">
+                </form-crud>
 
             </div>
 
@@ -236,9 +209,26 @@ export default {
                 type: 'alert-danger',
                 text: 'Error - Sorry :('
             },
-            item:{
-                name: ''
-            },
+            item:[
+                {
+                    name:'name',
+                    title:'Name',
+                    required:true,
+                    type:'text',
+                    value:''
+                },
+                {
+                    name:'guard_name',
+                    title:'Guard',
+                    required:true,
+                    type:'select',
+                    options:[
+                        {title: 'Web', value: 'web'},
+                        {title: 'Api', value: 'api'}
+                    ],
+                    value: 'api'
+                }
+            ],
             params:{
                 page: 1,
                 filter:{
@@ -251,6 +241,7 @@ export default {
             columns: [
                 {title:"Id",name: "id"},
                 {title:"Name",name: "name"},
+                {title:"Guard",name: "guardName"},
                 {title:"Created At",name: "createdAt"}
             ],
             sortOrders: {},
@@ -279,7 +270,8 @@ export default {
                     },
                     edit:{
                         title: 'Update '+this.title.singular
-                    }
+                    },
+                    selectOption: 'Select an option'
                 },
                 pagination:{
                     records: 'Records per Page',
@@ -298,13 +290,20 @@ export default {
                     required: 'is required'
                 }
             },
-            searchQuery: ''
+            searchQuery: '',
+            hasChanged: false
         }
     },
     watch: {
         searchQuery: function(newValue, oldValue) {
             if(!newValue){
                 this.getData()
+            }
+        },
+        hasChanged:function(newValue){
+            if(newValue){
+                this.getData()
+                this.hasChanged = false
             }
         }
     },
@@ -347,58 +346,10 @@ export default {
             .finally(() => this.loading = false)
 
         },
-        addItem(){
-
-            this.errors = []
-
-            if(this.validateForm()){
-                this.loading = true
-                axios.post(this.path, {attributes:this.item})
-                .then((response) =>{
-                    alert(this.trans.messages.itemAdded)
-                    this.cleanValues()
-                    this.data.push(response.data.data);
-                }).catch(error => {
-                    this.catchErrors(error)
-                    console.log(error)
-                })
-                .finally(() => this.loading = false)
-            }
-
-        },
         editForm(item){
             this.item.id = item.id;
             this.item.name = item.name;
             this.modeUpdate = true;
-        },
-        updateItem(itemUp){
-
-            this.errors = []
-
-            if(this.validateForm()){
-                let attributes = {
-                    attributes:{
-                        name: itemUp.name
-                    }
-                };
-
-                this.loading = true
-                axios.put(this.path+`/${itemUp.id}`,attributes)
-                .then(response=>{
-                    this.modeUpdate = false;
-                    let index = this.data.findIndex(
-                        item => item.id === itemUp.id
-                    );
-                    this.data[index] = response.data.data;
-                    this.cleanValues();
-                    alert(this.trans.messages.itemUpdated)
-                }).catch(error=>{
-                    this.catchErrors(error)
-                    console.log(error)
-                })
-                .finally(() => this.loading = false)
-            }
-
         },
         deleteItem(item,index){
             let resp = confirm(`Delete item:" ${item.name} " ?`);
@@ -414,38 +365,6 @@ export default {
                 })
                 .finally(() => this.loading = false)
             }
-        },
-        cancelUpdate(){
-            this.modeUpdate = false;
-            this.cleanValues()
-            this.errors = []
-
-        },
-        cleanValues(){
-            this.item = {
-                name: ''
-            };
-        },
-        catchErrors(error){
-            if (error.response){
-                this.errors = JSON.parse(error.response.data.errors);
-            }
-        },
-        validateForm() {
-
-            this.errors = []
-
-            if (this.item.name)
-                return true;
-
-            if (!this.item.name){
-                this.errors.push({
-                    "name":"Name "+this.trans.validations.required
-                });
-            }
-
-            return false
-
         },
         setSortOrders(){
             var sortOrders = {}
