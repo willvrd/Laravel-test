@@ -3,9 +3,10 @@
 
         <section class="forms">
 
-            <form @submit.prevent="updateItem(item)" v-if="modeUpdate">
+            <form @submit.prevent="onSubmit(item)">
                 <div class="card">
-                    <div class="card-header text-uppercase font-weight-bold">{{trans.form.edit.title}}</div>
+
+                    <div class="card-header text-uppercase font-weight-bold">{{ mainTitle }}</div>
                     <div class="card-body">
 
                         <div v-for="(attr, index) in item" :key="index">
@@ -28,39 +29,12 @@
 
                         </div>
 
-                        <button class="btn btn-primary" type="submit">{{trans.btn.update}}</button>
+                        <button class="btn btn-primary" type="submit">{{btnTitle}}</button>
 
-                        <button class="btn btn-danger" type="submit"
+                        <button v-if="modeUpdate" class="btn btn-danger" type="submit"
                             @click="cancelUpdate">{{trans.btn.cancel}}</button>
                     </div>
-                </div>
-            </form>
 
-            <form @submit.prevent="addItem" v-else>
-                <div class="card">
-                    <div class="card-header text-uppercase font-weight-bold">{{trans.form.add.title}}</div>
-                    <div class="card-body">
-                        <div v-for="(attr, index) in item" :key="index">
-
-                            <div v-if="attr.type=='text'" class="form-group">
-                                <label :for="'input_'+attr.name">{{attr.title}}</label>
-                                <input type="text" class="form-control mb-2"
-                                    :placeholder="attr.title" v-model="attr.value">
-                            </div>
-
-                            <div v-if="attr.type=='select'" class="form-group">
-                                <label :for="'input_'+attr.name">{{attr.title}}</label>
-                                <select :name="'select_'+attr.name" v-model="attr.value"  class="form-control">
-                                    <option value="">{{trans.form.selectOption}}</option>
-                                    <option  v-for="(opt,index) in attr.options" :key="index" :value="opt.value">
-                                        {{opt.title}}
-                                    </option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <button class="btn btn-primary" type="submit">{{trans.btn.add}}</button>
-                    </div>
                 </div>
             </form>
 
@@ -90,6 +64,14 @@ export default {
     data() {
         return {
             errors: []
+        }
+    },
+    computed:{
+        mainTitle(){
+            return this.modeUpdate ? this.trans.form.edit.title : this.trans.form.add.title
+        },
+        btnTitle(){
+            return this.modeUpdate ? this.trans.btn.update : this.trans.btn.add
         }
     },
     methods:{
@@ -204,6 +186,14 @@ export default {
                attr[attName] = item.value
             });
             return attr
+        },
+        onSubmit(item){
+
+            if(this.modeUpdate)
+                this.updateItem(item)
+            else
+                this.addItem()
+
         }
     }
 }
