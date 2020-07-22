@@ -7,10 +7,29 @@
                 <div class="card">
                     <div class="card-header text-uppercase font-weight-bold">{{trans.form.edit.title}}</div>
                     <div class="card-body">
-                        <label for="inputName">Name</label>
-                        <input type="text" class="form-control mb-2"
-                                    placeholder="Name" v-model="item.name">
+
+                        <div v-for="(attr, index) in item" :key="index">
+
+                            <div v-if="attr.type=='text'" class="form-group">
+                                <label :for="'input_'+attr.name">{{attr.title}}</label>
+                                <input type="text" class="form-control mb-2"
+                                        :placeholder="attr.title" v-model="attr.value">
+                            </div>
+
+                            <div v-if="attr.type=='select'" class="form-group">
+                                <label :for="'input_'+attr.name">{{attr.title}}</label>
+                                <select :name="'select_'+attr.name" v-model="attr.value"  class="form-control">
+                                    <option value="">{{trans.form.selectOption}}</option>
+                                    <option  v-for="(opt,index) in attr.options" :key="index" :value="opt.value">
+                                        {{opt.title}}
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+
                         <button class="btn btn-primary" type="submit">{{trans.btn.update}}</button>
+
                         <button class="btn btn-danger" type="submit"
                             @click="cancelUpdate">{{trans.btn.cancel}}</button>
                     </div>
@@ -61,6 +80,7 @@
 export default {
     props: {
         path:{type:String,required:true},
+        idSelected:{type:Number},
         modeUpdate:{type: Boolean,required: true},
         trans:{type: Object,required: true},
         item:{type: Array,required: true},
@@ -102,14 +122,11 @@ export default {
             this.errors = []
 
             if(this.validateForm()){
-                let attributes = {
-                    attributes:{
-                        name: itemUp.name
-                    }
-                };
+
+                let attr = this.fixAttributesToSend()
 
                 this.emitLoading(true)
-                axios.put(this.path+`/${itemUp.id}`,attributes)
+                axios.put(this.path+`/${this.idSelected}`,{attributes:attr})
                 .then(response=>{
                     this.emitMode(false)
                     this.emitHasChanged(true)
@@ -120,10 +137,13 @@ export default {
                     console.log(error)
                 })
                 .finally(() => this.emitLoading(false))
+
             }
+
 
         },
         cancelUpdate(){
+
             this.emitMode(false)
             this.cleanValues()
             this.errors = []
@@ -172,10 +192,16 @@ export default {
         emitHasChanged(value){
             this.$emit('hasChanged',value);
         },
+        transformToSnakeCase(string) {
+            return string.replace(/[\w]([A-Z0-9])/g, function (m) {
+                return m[0] + '_' + m[1]
+            }).toLowerCase()
+        },
         fixAttributesToSend(){
             let attr = {}
             this.item.forEach(item => {
-               attr[item.name] = item.value
+               let attName = this.transformToSnakeCase(item.name)
+               attr[attName] = item.value
             });
             return attr
         }

@@ -170,7 +170,7 @@
 
             <div class="col-md-3">
 
-                <form-crud :path="path" :trans="trans"
+                <form-crud :path="path" :trans="trans" :idSelected="idSelected"
                     :modeUpdate="modeUpdate" @modeUpdate="modeUpdate = $event"
                     :item="item" @item="item = $event"
                     :loading="loading" @loading="loading = $event"
@@ -218,7 +218,7 @@ export default {
                     value:''
                 },
                 {
-                    name:'guard_name',
+                    name:'guardName',
                     title:'Guard',
                     required:true,
                     type:'select',
@@ -291,7 +291,8 @@ export default {
                 }
             },
             searchQuery: '',
-            hasChanged: false
+            hasChanged: false,
+            idSelected: null
         }
     },
     watch: {
@@ -346,9 +347,14 @@ export default {
             .finally(() => this.loading = false)
 
         },
-        editForm(item){
-            this.item.id = item.id;
-            this.item.name = item.name;
+        editForm(itemSelected){
+
+            this.idSelected = itemSelected.id
+
+            this.item.forEach(item => {
+                item.value = itemSelected[item.name]
+            });
+
             this.modeUpdate = true;
         },
         deleteItem(item,index){
