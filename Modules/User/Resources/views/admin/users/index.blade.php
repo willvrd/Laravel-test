@@ -5,9 +5,8 @@
 @section('content')
 
     <user-index
-        title="{{ __("user::users.title.users") }}"
-        module-name="{!! config('user.name') !!}"
-        init-msj="{{ __("user::common.messages.welcome") }}">
+        :title="{singular:'{{trans_choice('user::users.title.user', 1)}}',plural:'{{trans_choice('user::users.title.user', 2)}}'}"
+        path="{{route(app()->getLocale().'.api.user.users.index')}}">
     </user-index>
 
 @endsection

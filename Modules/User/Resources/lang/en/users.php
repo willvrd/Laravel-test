@@ -6,7 +6,7 @@ return [
     'edit resource' => '',
     'destroy resource' => '',
     'title' => [
-        "users" => "Users"
+        "user" => "User|Users"
     ],
     'button' => [
     ],
