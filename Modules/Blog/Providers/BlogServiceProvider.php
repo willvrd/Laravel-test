@@ -5,6 +5,8 @@ namespace Modules\Blog\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 
+use Modules\Blog\Console\InitCommand;
+
 class BlogServiceProvider extends ServiceProvider
 {
     /**
@@ -40,6 +42,10 @@ class BlogServiceProvider extends ServiceProvider
     {
         $this->app->register(RouteServiceProvider::class);
         $this->registerBindings();
+
+        $this->commands([
+            InitCommand::class
+        ]);
     }
 
     /**

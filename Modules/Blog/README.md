@@ -9,6 +9,10 @@
         ```
         php artisan module:migrate Blog
         ```
+    2. Run this command: 
+        ```
+        php artisan blog:init
+        ```
 
 ## End Points
 

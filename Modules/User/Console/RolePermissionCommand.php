@@ -5,13 +5,16 @@ namespace Modules\User\Console;
 use Illuminate\Console\Command;
 
 use Modules\User\Entities\Role;
-use Modules\User\Entities\Permission;
-use Modules\User\Entities\User;
 
 use Spatie\Permission\PermissionRegistrar;
 
+use Modules\User\Traits\Permissions;
+
 class RolePermissionCommand extends Command
 {
+
+    use Permissions;
+
     /**
      * The console command name.
      *
@@ -60,7 +63,7 @@ class RolePermissionCommand extends Command
                 $roles = ["super-admin", "admin", "user"];
 
                 $this->createRoles($roles);
-                $this->createPermissions();
+                $this->createPermissionsFromModule("user.permissions");
                 $this->createDefaultUsers($roles,$email,$password);
 
                 $this->info("THAT'S ALL MY FRIEND ;)");
@@ -104,24 +107,6 @@ class RolePermissionCommand extends Command
             $role = Role::updateOrCreate(['name' => $role]);
             $bar->advance();
         }
-        $bar->finish();
-        $this->line('');
-
-    }
-
-    public function createPermissions(){
-
-        $permissions = config("user.permissions");
-
-        $this->line('Creating Permissions:');
-        $bar = $this->output->createProgressBar(count($permissions));
-        $bar->start();
-
-        foreach ($permissions as $permission) {
-            $permission = Permission::updateOrCreate(['name' => $permission]);
-            $bar->advance();
-        }
-
         $bar->finish();
         $this->line('');
 

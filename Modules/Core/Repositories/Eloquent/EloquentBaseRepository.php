@@ -197,7 +197,7 @@ abstract class EloquentBaseRepository implements BaseRepository
      * Get All - Index
      * @return bool
      */
-    public function getItemsBy($params = false)
+    public function getItemsBy($params)
     {
 
       // INITIALIZE QUERY
@@ -259,7 +259,7 @@ abstract class EloquentBaseRepository implements BaseRepository
      * Get Item - Show
      * @return Register
      */
-    public function getItem($criteria, $params = false)
+    public function getItem($criteria, $params)
     {
         // INITIALIZE QUERY
         $query = $this->model->query();
