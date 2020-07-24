@@ -221,7 +221,7 @@ export default {
                     name:'email',
                     title:'Email',
                     required:true,
-                    type:'text',
+                    type:'email',
                     value:''
                 }
 
@@ -284,7 +284,8 @@ export default {
                     error: 'Error :( ',
                 },
                 validations:{
-                    required: 'is required'
+                    required: 'is required',
+                    email: 'must be valid'
                 }
             },
             searchQuery: '',

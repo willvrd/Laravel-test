@@ -9,7 +9,7 @@
 
         @can("user.users.index")
             <a class="dropdown-item" href="{{route(app()->getLocale().'.admin.user.users.index')}}">
-                {{ __('user::users.title.users') }}
+                {{ trans_choice('user::users.title.user', 2) }}
             </a>
         @endcan
 

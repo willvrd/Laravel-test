@@ -17,6 +17,12 @@
                                         :placeholder="attr.title" v-model="attr.value">
                             </div>
 
+                            <div v-if="attr.type=='email'" class="form-group">
+                                <label :for="'input_'+attr.name">{{attr.title}}</label>
+                                <input type="email" class="form-control mb-2"
+                                        :placeholder="attr.title" v-model="attr.value">
+                            </div>
+
                             <div v-if="attr.type=='select'" class="form-group">
                                 <label :for="'input_'+attr.name">{{attr.title}}</label>
                                 <select :name="'select_'+attr.name" v-model="attr.value"  class="form-control">
@@ -139,20 +145,39 @@ export default {
             this.emitItem(newItem)
 
         },
+        addError(name){
+            this.errors.push({
+                "name":name
+            });
+        },
         catchErrors(error){
+
+            let objErrors = {}
+
             if (error.response){
-                this.errors = JSON.parse(error.response.data.errors);
+                objErrors = JSON.parse(error.response.data.errors);
             }
+
+            Object.entries(objErrors).forEach(([key, value]) => {
+                value.forEach(element => {
+                    this.addError(element)
+                });
+            })
+
         },
         validateForm() {
 
             this.errors = []
+            let error = ""
 
             this.item.forEach(item => {
                 if(item.required && !item.value){
-                    this.errors.push({
-                        "name":item.title+" "+this.trans.validations.required
-                    });
+                    error = item.title+" "+this.trans.validations.required
+                    this.addError(error)
+                }
+                if(item.type=="email" && !this.validEmail(item.value)){
+                    error = item.title+" "+this.trans.validations.email
+                    this.addError(error)
                 }
             });
 
@@ -194,6 +219,10 @@ export default {
             else
                 this.addItem()
 
+        },
+        validEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
         }
     }
 }

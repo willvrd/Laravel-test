@@ -2585,6 +2585,24 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2745,20 +2763,46 @@ __webpack_require__.r(__webpack_exports__);
       });
       this.emitItem(newItem);
     },
-    catchErrors: function catchErrors(error) {
-      if (error.response) {
-        this.errors = JSON.parse(error.response.data.errors);
-      }
+    addError: function addError(name) {
+      this.errors.push({
+        "name": name
+      });
     },
-    validateForm: function validateForm() {
+    catchErrors: function catchErrors(error) {
       var _this3 = this;
 
+      var objErrors = {};
+
+      if (error.response) {
+        objErrors = JSON.parse(error.response.data.errors);
+      }
+
+      Object.entries(objErrors).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            value = _ref2[1];
+
+        value.forEach(function (element) {
+          _this3.addError(element);
+        });
+      });
+    },
+    validateForm: function validateForm() {
+      var _this4 = this;
+
       this.errors = [];
+      var error = "";
       this.item.forEach(function (item) {
         if (item.required && !item.value) {
-          _this3.errors.push({
-            "name": item.title + " " + _this3.trans.validations.required
-          });
+          error = item.title + " " + _this4.trans.validations.required;
+
+          _this4.addError(error);
+        }
+
+        if (item.type == "email" && !_this4.validEmail(item.value)) {
+          error = item.title + " " + _this4.trans.validations.email;
+
+          _this4.addError(error);
         }
       });
       if (Object.keys(this.errors).length == 0) return true;
@@ -2782,11 +2826,11 @@ __webpack_require__.r(__webpack_exports__);
       }).toLowerCase();
     },
     fixAttributesToSend: function fixAttributesToSend() {
-      var _this4 = this;
+      var _this5 = this;
 
       var attr = {};
       this.item.forEach(function (item) {
-        var attName = _this4.transformToSnakeCase(item.name);
+        var attName = _this5.transformToSnakeCase(item.name);
 
         attr[attName] = item.value;
       });
@@ -2794,6 +2838,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     onSubmit: function onSubmit(item) {
       if (this.modeUpdate) this.updateItem(item);else this.addItem();
+    },
+    validEmail: function validEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     }
   }
 });
@@ -4017,7 +4065,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'email',
         title: 'Email',
         required: true,
-        type: 'text',
+        type: 'email',
         value: ''
       }],
       params: {
@@ -4085,7 +4133,8 @@ __webpack_require__.r(__webpack_exports__);
           error: 'Error :( '
         },
         validations: {
-          required: 'is required'
+          required: 'is required',
+          email: 'must be valid'
         }
       },
       searchQuery: '',
@@ -41801,6 +41850,38 @@ var render = function() {
                             ],
                             staticClass: "form-control mb-2",
                             attrs: { type: "text", placeholder: attr.title },
+                            domProps: { value: attr.value },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(attr, "value", $event.target.value)
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    attr.type == "email"
+                      ? _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "label",
+                            { attrs: { for: "input_" + attr.name } },
+                            [_vm._v(_vm._s(attr.title))]
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: attr.value,
+                                expression: "attr.value"
+                              }
+                            ],
+                            staticClass: "form-control mb-2",
+                            attrs: { type: "email", placeholder: attr.title },
                             domProps: { value: attr.value },
                             on: {
                               input: function($event) {
