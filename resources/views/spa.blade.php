@@ -12,6 +12,9 @@
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+        <!-- Scripts -->
+        <script src="{{ asset('js/app.js') }}" defer></script>
+
         <!-- Styles -->
         <style>
             html, body {
@@ -67,6 +70,7 @@
         </style>
     </head>
     <body>
+    <div id="app">
 
         @include('partials.header')
 
@@ -86,24 +90,18 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
 
-                <div class="links">
-                    <a href="{{url('spa')}}">VueJS SPA</a>
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                <transition name="slide-fade" mode="out-in">
+                    <router-view :key="$route.fullPath"></router-view>
+                </transition>
+
+                <navbar></navbar>
+
             </div>
         </div>
 
         @include('partials.footer')
+
+    </div>
     </body>
 </html>

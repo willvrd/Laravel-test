@@ -27,4 +27,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale()], function()
     // View Home User
     Route::get('/backend', 'HomeController@index')->name('backend');
 
+    // View SPA
+    Route::get('/spa', function () {
+        return view('spa');
+    });
+
 });
