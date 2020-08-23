@@ -55,7 +55,12 @@ Vue.component('navbar', require('./components/navbar.vue').default);
 
 import router from './routes'
 
+import UserRoutes from '../../Modules/User/Resources/assets/js/spa/UserRoutes';
+
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    routes: [
+        ...UserRoutes
+    ],
 });
